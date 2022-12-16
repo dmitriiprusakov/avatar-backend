@@ -10,6 +10,7 @@ import "./libs/i18next";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
+const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ async function main() {
 		server.listen(PORT, () => {
 			console.log("We are live on " + PORT);
 			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH, !!IS_TESTING_BRANCH);
+			console.log("YOOMONEY_TOKEN", YOOMONEY_TOKEN);
 
 			const bot = initBot();
 			initRoutes(app, bot);
