@@ -44,15 +44,19 @@ const initBot = () => {
 	});
 
 	bot.on("callback_query", async (query) => {
-		const { id: queryId, message, from, data } = query;
+		const { id: queryId, from, data } = query;
 		const { id } = from;
-		const { chat } = message;
 
 		if (data === "woman" || data === "man") {
+			if (!usersImagesLinks[id]) {
+				await bot.sendMessage(query.id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
+				await bot.answerCallbackQuery(queryId, { text: "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
+			}
+
 			usersImagesLinks[id] = Object.assign(usersImagesLinks[id], { sex: data as Sex });
 
 			await bot.sendMessage(
-				chat.id,
+				id,
 				"Сколько аватарок рисуем?",
 				{
 					reply_markup: {
@@ -71,7 +75,7 @@ const initBot = () => {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			await bot.sendInvoice(
-				chat.id,
+				id,
 				"Аватарки 80/10",
 				"Оплата стилизации 80 аватарок в 10 разных стилях",
 				"Payload",
@@ -86,7 +90,7 @@ const initBot = () => {
 
 	bot.on("message", async (message) => {
 		try {
-			const { text, from, chat, photo, document, successful_payment } = message;
+			const { text, from, photo, document, successful_payment } = message;
 			const { language_code: lng, is_bot, id, username } = from;
 
 			if (is_bot) return;
