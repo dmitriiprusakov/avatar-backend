@@ -21,7 +21,7 @@ async function main() {
 
 		server.listen(PORT, () => {
 			console.log("We are live on " + PORT);
-			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH);
+			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH, !!IS_TESTING_BRANCH);
 
 			const bot = initBot();
 			initRoutes(app, bot);
