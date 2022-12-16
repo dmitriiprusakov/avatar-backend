@@ -9,6 +9,7 @@ import initRoutes from "./ports";
 import "./libs/i18next";
 
 const PORT = process.env.PORT || 8080;
+const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,7 @@ async function main() {
 
 		server.listen(PORT, () => {
 			console.log("We are live on " + PORT);
+			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH);
 
 			const bot = initBot();
 			initRoutes(app, bot);
