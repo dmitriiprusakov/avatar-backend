@@ -49,7 +49,7 @@ const initBot = () => {
 
 		if (data === "woman" || data === "man") {
 			if (!usersImagesLinks[id]) {
-				await bot.sendMessage(query.id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
+				await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
 				await bot.answerCallbackQuery(queryId, { text: "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
 			}
 
