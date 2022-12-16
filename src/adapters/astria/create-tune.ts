@@ -13,7 +13,7 @@ type Sex = "man" | "woman";
 export const createTune = async (chatId: number, image_urls: string[], name: Sex, username: string) => {
 	const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
 	const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
-	console.log({ ASTRIA_CALLBACK_DOMAIN, IS_TESTING_BRANCH });
+	console.log({ ASTRIA_CALLBACK_DOMAIN, IS_TESTING_BRANCH, image_urls, name, username });
 
 	const namedPrompts = getPromptsForName(name);
 

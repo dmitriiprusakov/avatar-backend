@@ -31,6 +31,7 @@ const initBot = () => {
 		try {
 			const { from } = query;
 			const { id } = from;
+			console.log("Pre_checkout_query=", query);
 
 			if (!usersImagesLinks[id]) {
 				await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
@@ -46,6 +47,7 @@ const initBot = () => {
 	bot.on("callback_query", async (query) => {
 		const { id: queryId, from, data } = query;
 		const { id } = from;
+		console.log("Callback_query=", query);
 
 		if (!usersImagesLinks[id]) {
 			await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
@@ -92,6 +94,8 @@ const initBot = () => {
 		try {
 			const { text, from, photo, document, successful_payment } = message;
 			const { language_code: lng, is_bot, id, username } = from;
+
+			console.log("Message=", message);
 
 			if (is_bot) return;
 
@@ -169,6 +173,7 @@ const initBot = () => {
 			}
 
 			if (successful_payment) {
+				console.log("Successful_payment=");
 				await createTune(id, usersImagesLinks[id].links, usersImagesLinks[id].sex, username);
 				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete usersImagesLinks[id];
