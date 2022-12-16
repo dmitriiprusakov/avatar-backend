@@ -6,8 +6,8 @@ import { getDocumentLink } from "./utils";
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
-const MIN_IMAGES_COUNT = 5;
-const MAX_IMAGES_COUNT = 20;
+const MIN_IMAGES_COUNT = 10;
+const MAX_IMAGES_COUNT = 30;
 
 type Sex = "man" | "woman"
 type UserData = {
@@ -33,13 +33,13 @@ const initBot = () => {
 			const { id } = from;
 
 			if (!usersImagesLinks[id]) {
-				await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
+				await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
 				return;
 			}
 			await bot.answerPreCheckoutQuery(query.id, true);
 		} catch (error) {
 			console.log("Error: ", error);
-			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Something went wrong" });
+			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Что-то пошло не так!" });
 		}
 	});
 
@@ -55,6 +55,7 @@ const initBot = () => {
 		if (data === "woman" || data === "man") {
 			usersImagesLinks[id] = Object.assign(usersImagesLinks[id], { sex: data as Sex });
 
+			// TODO: editMessageReplyMarkup
 			await bot.sendMessage(
 				id,
 				"Сколько аватарок рисуем?",
@@ -96,18 +97,21 @@ const initBot = () => {
 			if (is_bot) return;
 
 			if (text === "/start") {
-				await bot.sendMessage(id, t("welcome", { lng }));
+				await bot.sendMessage(id, t("welcome", { lng: "ru" }));
 				return;
 			}
 
 			if (text === "/help") {
-				await bot.sendMessage(id, t("welcome", { lng }));
+				await bot.sendMessage(id, t("help", { lng: "ru" }));
 				return;
 			}
 
-			if (text === "/tune") {
+			if (text === "/draw") {
 				if (!usersImagesLinks[id]) {
-					await bot.sendMessage(id, t("welcome", { lng }));
+					await bot.sendMessage(
+						id,
+						"Пришлите фотографии, чтобы их затюнить!"
+					);
 					return;
 				}
 				if (!usersImagesLinks[id].links.length) {
@@ -117,6 +121,7 @@ const initBot = () => {
 					);
 					return;
 				}
+				// TODO: editMessageReplyMarkup
 				if (!usersImagesLinks[id].sex) {
 					await bot.sendMessage(
 						id,
@@ -158,7 +163,7 @@ const initBot = () => {
 				} else {
 					bot.sendMessage(
 						id,
-						`Классная фотка, можно уже посылать на обработку /tune, а можно добить до максимума, еще ${MAX_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
+						`Классная фотка, можно уже посылать на обработку /draw, а можно добить до максимума, еще ${MAX_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
 					);
 				}
 				return;
