@@ -29,6 +29,13 @@ const initBot = () => {
 
 	bot.on("pre_checkout_query", async (query) => {
 		try {
+			const { from } = query;
+			const { id } = from;
+
+			if (!usersImagesLinks[id]) {
+				await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
+				return;
+			}
 			await bot.answerPreCheckoutQuery(query.id, true);
 		} catch (error) {
 			console.log("Error: ", error);
@@ -66,7 +73,7 @@ const initBot = () => {
 			await bot.sendInvoice(
 				chat.id,
 				"Аватарки 80/10",
-				"Description",
+				"Оплата стилизации 80 аватарок в 10 разных стилях",
 				"Payload",
 				YOOMONEY_TOKEN,
 				"RUB",
@@ -85,12 +92,12 @@ const initBot = () => {
 			if (is_bot) return;
 
 			if (text === "/start") {
-				await bot.sendMessage(chat.id, t("welcome", { lng }));
+				await bot.sendMessage(id, t("welcome", { lng }));
 				return;
 			}
 
 			if (text === "/help") {
-				await bot.sendMessage(chat.id, t("welcome", { lng }));
+				await bot.sendMessage(id, t("welcome", { lng }));
 				return;
 			}
 
@@ -98,14 +105,14 @@ const initBot = () => {
 				if (!usersImagesLinks[id]) return;
 				if (!usersImagesLinks[id].links.length) {
 					await bot.sendMessage(
-						chat.id,
+						id,
 						"Пришлите фотографии, чтобы их затюнить!"
 					);
 					return;
 				}
 				if (!usersImagesLinks[id].sex) {
 					await bot.sendMessage(
-						chat.id,
+						id,
 						"Кто на выбранных фотографиях?",
 						{
 							reply_markup: {
@@ -123,7 +130,7 @@ const initBot = () => {
 
 			if (photo && photo.length) {
 				bot.sendMessage(
-					chat.id,
+					id,
 					"Лучше прикрепите фотографии как документы, чтобы не потерять качество!"
 				);
 				return;
@@ -138,12 +145,12 @@ const initBot = () => {
 
 				if (usersImagesLinks[id].links.length < MIN_IMAGES_COUNT) {
 					bot.sendMessage(
-						chat.id,
+						id,
 						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
 					);
 				} else {
 					bot.sendMessage(
-						chat.id,
+						id,
 						`Классная фотка, можно уже посылать на обработку /tune, а можно добить до максимума, еще ${MAX_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
 					);
 				}
@@ -151,13 +158,13 @@ const initBot = () => {
 			}
 
 			if (successful_payment) {
-				await createTune(chat.id, usersImagesLinks[id].links, usersImagesLinks[id].sex, username);
-				await bot.sendMessage(chat.id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
+				await createTune(id, usersImagesLinks[id].links, usersImagesLinks[id].sex, username);
+				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete usersImagesLinks[id];
 				return;
 			}
 
-			bot.sendMessage(chat.id, "Не совсем понял, что вы имеете ввиду!");
+			bot.sendMessage(id, "Не совсем понял, что вы имеете ввиду!");
 		} catch (error) {
 			console.error("Error!:", error);
 		}
