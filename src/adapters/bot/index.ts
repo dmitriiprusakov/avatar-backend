@@ -47,12 +47,12 @@ const initBot = () => {
 		const { id: queryId, from, data } = query;
 		const { id } = from;
 
-		if (data === "woman" || data === "man") {
-			if (!usersImagesLinks[id]) {
-				await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
-				return;
-			}
+		if (!usersImagesLinks[id]) {
+			await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
+			return;
+		}
 
+		if (data === "woman" || data === "man") {
 			usersImagesLinks[id] = Object.assign(usersImagesLinks[id], { sex: data as Sex });
 
 			await bot.sendMessage(
