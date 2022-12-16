@@ -106,7 +106,10 @@ const initBot = () => {
 			}
 
 			if (text === "/tune") {
-				if (!usersImagesLinks[id]) return;
+				if (!usersImagesLinks[id]) {
+					await bot.sendMessage(id, t("welcome", { lng }));
+					return;
+				}
 				if (!usersImagesLinks[id].links.length) {
 					await bot.sendMessage(
 						id,
