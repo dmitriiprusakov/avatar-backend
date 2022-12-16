@@ -63,7 +63,7 @@ const initBot = () => {
 		if (data === "payment-1" || data === "payment-2") {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			const invoiceMessage = await bot.sendInvoice(
+			await bot.sendInvoice(
 				chat.id,
 				"Аватарки 80/10",
 				"Description",
@@ -72,6 +72,7 @@ const initBot = () => {
 				"RUB",
 				[{ "amount": 29900, "label": "Руб" }]
 			);
+
 			await bot.answerCallbackQuery(queryId);
 		}
 	});
