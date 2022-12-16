@@ -163,7 +163,7 @@ const initBot = () => {
 				} else {
 					bot.sendMessage(
 						id,
-						`Классная фотка, можно уже посылать на обработку /draw, а можно добить до максимума, еще ${MAX_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
+						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - usersImagesLinks[id].links.length}!`
 					);
 				}
 				return;
