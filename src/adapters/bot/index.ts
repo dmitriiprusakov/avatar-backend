@@ -62,8 +62,7 @@ const initBot = () => {
 				{
 					reply_markup: {
 						inline_keyboard: [
-							[{ text: "80 аватарок/10 стилей = 299 ₽", callback_data: "payment-1" }],
-							// [{ text: "160 аватарок/20 стилей = 599 ₽", callback_data: "payment-2" }],
+							[{ text: "240 аватарок/30 стилей = 799 ₽", callback_data: "payment-1" }],
 						],
 					},
 				}
@@ -77,12 +76,12 @@ const initBot = () => {
 			// @ts-ignore
 			await bot.sendInvoice(
 				id,
-				"Аватарки 80/10",
-				"Оплата стилизации 80 аватарок в 10 разных стилях",
+				"Аватарки 240/30",
+				"Оплата стилизации 240 аватарок в 30 разных стилях",
 				"Payload",
 				YOOMONEY_TOKEN,
 				"RUB",
-				[{ "amount": 29900, "label": "Руб" }]
+				[{ "amount": 79900, "label": "Руб" }]
 			);
 
 			await bot.answerCallbackQuery(queryId);
