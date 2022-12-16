@@ -150,11 +150,9 @@ const initBot = () => {
 			}
 
 			if (successful_payment) {
-				console.log({ d: usersImagesLinks[id] });
-
 				await createTune(chat.id, usersImagesLinks[id].links, usersImagesLinks[id].sex, username);
-
 				await bot.sendMessage(chat.id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
+				delete usersImagesLinks[id];
 				return;
 			}
 

@@ -8,7 +8,7 @@ const getPromptsForName = (name: Sex) => {
 	if (name === "man") return man_prompts;
 };
 
-type Sex = "man" | "woman"
+type Sex = "man" | "woman";
 
 export const createTune = async (chatId: number, image_urls: string[], name: Sex, username: string) => {
 	const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
@@ -21,7 +21,6 @@ export const createTune = async (chatId: number, image_urls: string[], name: Sex
 		text: prompt.text,
 		callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
 	}));
-	console.log({ prompts_attributes, IS_TESTING_BRANCH });
 
 	const tune: Tune = {
 		title: username,
@@ -34,8 +33,6 @@ export const createTune = async (chatId: number, image_urls: string[], name: Sex
 	if (IS_TESTING_BRANCH) {
 		tune.branch = "fast";
 	}
-
-	console.log({ tune });
 
 	const { data } = await axiosAstria.post("/tunes", { tune });
 
