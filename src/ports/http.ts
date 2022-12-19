@@ -2,16 +2,16 @@ import { Application } from "express";
 import TelegramBot from "node-telegram-bot-api";
 
 type PromptCallbackPayload = {
-	id: number, //
-	text: string, //
-	negative_prompt: string, //
-	steps: null, //
-	trained_at: string, //
-	started_training_at: string, //
-	created_at: string, //
-	updated_at: string, //
-	tune_id: number, //
-	images: string[] //
+	id: number,
+	text: string,
+	negative_prompt: string,
+	steps: null,
+	trained_at: string,
+	started_training_at: string,
+	created_at: string,
+	updated_at: string,
+	tune_id: number,
+	images: string[]
 }
 
 const initRoutes = (app: Application, bot: TelegramBot) => {
@@ -23,7 +23,7 @@ const initRoutes = (app: Application, bot: TelegramBot) => {
 
 			await bot.sendMessage(chatId as string, "Почти готово!");
 
-			res.send("OK, Thanks for finetune, Astria! Sending prompts...");
+			res.send("OK, Thanks for finetune, Astria! Waiting for prompts...");
 		} catch (error) {
 			console.log("Error in finetune callback: ", error);
 		}
@@ -39,11 +39,13 @@ const initRoutes = (app: Application, bot: TelegramBot) => {
 			const prompt: PromptCallbackPayload = req.body.prompt;
 			const { images } = prompt;
 
-			await bot.sendMessage(chatId as string, "Один из стилей:");
+			let message = "Один из стилей:\n";
 
-			images.forEach(async imageUrl => {
-				await bot.sendMessage(chatId as string, imageUrl);
+			images.forEach(imageUrl => {
+				message += imageUrl + "\n";
 			});
+
+			await bot.sendMessage(chatId as string, message);
 
 			res.send("OK, Thanks for prompts, Astria! See ya!");
 		} catch (error) {

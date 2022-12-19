@@ -11,12 +11,9 @@ i18next
 		fallbackLng: "en",
 		lng: "en",
 		preload: ["en", "ru"],
-		
+
 		backend: {
-			loadPath: path.resolve(__dirname, "../locales/{{lng}}/{{ns}}.json"),
-			// requestOptions: {
-			// 	cache: "no-store",
-			// },
+			loadPath: path.resolve(__dirname, "../../resources/locales/{{lng}}/{{ns}}.json"),
 		},
 	});
 

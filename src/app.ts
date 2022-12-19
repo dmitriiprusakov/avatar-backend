@@ -4,13 +4,15 @@ dotenv.config();
 import express from "express";
 import http from "http";
 
-import { initBot } from "./adapters/bot";
-import initRoutes from "./ports";
+import { initTelegramBot } from "./adapters/bot/telegram";
+import initRoutes from "./ports/http";
 import "./libs/i18next";
+
+import { UsersImagesLinks } from "./types";
+import { initExternalServices } from "./adapters/externals";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
-const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 
 const app = express();
 app.use(express.json());
@@ -20,12 +22,16 @@ async function main() {
 	try {
 		const server = http.createServer(app);
 
+		const repository: UsersImagesLinks = {};
+
 		server.listen(PORT, () => {
 			console.log("We are live on " + PORT);
 			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH, !!IS_TESTING_BRANCH);
-			console.log("YOOMONEY_TOKEN", YOOMONEY_TOKEN);
 
-			const bot = initBot();
+			const externals = initExternalServices();
+
+			const bot = initTelegramBot({ repository, externals });
+
 			initRoutes(app, bot);
 		});
 	} catch (error) {
