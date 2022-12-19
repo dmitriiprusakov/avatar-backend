@@ -118,7 +118,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 				promptsAmount: invoice_payload,
 			});
 			await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
-			// delete repository[id];
+			delete repository[id];
 			return;
 		}
 
