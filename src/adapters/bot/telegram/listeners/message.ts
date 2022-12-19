@@ -19,7 +19,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 		const { text, from, photo, document, successful_payment } = message;
 		const { is_bot, id, username } = from;
 
-		console.log("Message=", message);
+		// console.log("Message=", message);
 
 		if (is_bot) return;
 
@@ -30,6 +30,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 		if (text === "/help") {
 			await bot.sendMessage(id, t("help", { lng: "ru" }));
+
 			return;
 		}
 
@@ -61,10 +62,27 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 		}
 
 		if (photo && photo.length) {
-			bot.sendMessage(
-				id,
-				"Лучше прикрепите фотографии как документы, чтобы не потерять качество!"
-			);
+			console.log({ photo });
+
+			const maxSizeFile = photo.at(-1);
+
+			const photoLink = await bot.getFileLink(maxSizeFile.file_id);
+
+			repository[id] = {
+				links: (repository[id]?.links || []).concat([photoLink]),
+			};
+
+			if (repository[id].links.length < MIN_IMAGES_COUNT) {
+				bot.sendMessage(
+					id,
+					`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
+				);
+			} else {
+				bot.sendMessage(
+					id,
+					`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
+				);
+			}
 			return;
 		}
 

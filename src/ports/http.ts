@@ -1,5 +1,5 @@
 import { Application } from "express";
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot, { InputMedia } from "node-telegram-bot-api";
 
 type PromptCallbackPayload = {
 	id: number,
@@ -39,13 +39,13 @@ const initRoutes = (app: Application, bot: TelegramBot) => {
 			const prompt: PromptCallbackPayload = req.body.prompt;
 			const { images } = prompt;
 
-			let message = "Один из стилей:\n";
+			const media = images.map<InputMedia>((imageUrl, index) => ({
+				type: "photo",
+				media: imageUrl,
+				caption: index === 0 ? "Один из стилей:" : undefined,
+			}));
 
-			images.forEach(imageUrl => {
-				message += imageUrl + "\n";
-			});
-
-			await bot.sendMessage(chatId as string, message);
+			await bot.sendMediaGroup(chatId as string, media);
 
 			res.send("OK, Thanks for prompts, Astria! See ya!");
 		} catch (error) {
