@@ -37,14 +37,14 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 				logger.log({
 					level: "info",
-					message: `C /start from ${id}`,
+					message: `C /start from ${id} ${username}`,
 				});
 
 				return;
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C /start from ${id}, ${error}`,
+					message: `Error, C /start from ${id} ${username}, ${error}`,
 				});
 			}
 		}
@@ -56,7 +56,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C /help from ${id}, ${error}`,
+					message: `Error, C /help from ${id} ${username}, ${error}`,
 				});
 			}
 		}
@@ -88,14 +88,14 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 				logger.log({
 					level: "info",
-					message: `C /draw from ${id}`,
+					message: `C /draw from ${id} ${username}`,
 				});
 
 				return;
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C /draw from ${id}, ${error}`,
+					message: `Error, C /draw from ${id} ${username}, ${error}`,
 				});
 			}
 		}
@@ -125,7 +125,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, F from ${id}, ${error} ${repository[id]?.links.join(",")}`,
+					message: `Error, F from ${id} ${username}, ${error} ${repository[id]?.links.join(",")}`,
 				});
 			}
 
@@ -154,36 +154,35 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, D from ${id}, ${error} ${repository[id]?.links.join(",")}`,
+					message: `Error, D from ${id} ${username}, ${error} ${repository[id]?.links.join(",")}`,
 				});
 			}
 		}
 
 		if (successful_payment) {
 			try {
-				const { invoice_payload } = successful_payment;
+
+				logger.log({
+					level: "info",
+					message: `S_P from ${id} ${username}`,
+				});
 
 				await externals.astria.createTune({
 					chatId: id,
 					image_urls: repository[id].links,
 					name: repository[id].sex,
 					username,
-					promptsAmount: invoice_payload,
+					promptsAmount: successful_payment.invoice_payload,
 				});
 
 				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete repository[id];
 
-				logger.log({
-					level: "info",
-					message: `S_P from ${id}`,
-				});
-
 				return;
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, S_P from ${id}, ${error}`,
+					message: `Error, S_P from ${id} ${username}, ${error}`,
 				});
 			}
 		}

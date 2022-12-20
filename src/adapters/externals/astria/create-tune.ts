@@ -53,11 +53,11 @@ export const createTune = async ({ chatId, username, name, image_urls, promptsAm
 
 		await axiosAstria.post("/tunes", { tune });
 
-		logger.log("info", `T to A for ${chatId}`);
+		logger.log("info", `T to A for ${chatId}, params: ${username}, ${name}`);
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, T for ${chatId}, ${error}`,
+			message: `Error, T for ${chatId} ${username}, ${error}`,
 		});
 	}
 };

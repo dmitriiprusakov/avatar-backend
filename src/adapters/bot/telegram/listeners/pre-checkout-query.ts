@@ -10,7 +10,7 @@ interface PreCheckoutQueryListener {
 const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQueryListener) => {
 	try {
 		const { from } = query;
-		const { id } = from;
+		const { id, username } = from;
 
 		if (!repository[id]) {
 			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
@@ -20,12 +20,12 @@ const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQ
 
 		logger.log({
 			level: "info",
-			message: `P_Q from ${id}`,
+			message: `P_Q from ${id} ${username}`,
 		});
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error P_Q , ${error}`,
+			message: `Error P_Q, ${error}`,
 		});
 	}
 };

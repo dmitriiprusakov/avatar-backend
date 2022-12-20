@@ -71,7 +71,7 @@ type CallbackQueryListener = {
 const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryListener) => {
 	try {
 		const { id: queryId, from, data } = query;
-		const { id } = from;
+		const { id, username } = from;
 
 		const [queryType, queryValue] = data.split("/");
 
@@ -82,7 +82,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C_Q from ${id}, ${error}`,
+					message: `Error, C_Q from ${id} ${username}, ${error}`,
 				});
 			}
 		}
@@ -108,7 +108,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C_Q from ${id}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+					message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 				});
 			}
 		}
@@ -132,7 +132,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, C_Q from ${id}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+					message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 				});
 			}
 		}
