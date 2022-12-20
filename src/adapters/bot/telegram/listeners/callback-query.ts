@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { logger } from "../../../../logger";
 import TelegramBot, { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api";
 import { Sex, UsersImagesLinks } from "../../../../types";
+import { v4 as uuidv4 } from "uuid";
 
 const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 
@@ -116,7 +118,6 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 		if (queryType === "payment") {
 			try {
 				const selectedPayment = payments[queryValue];
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				await bot.sendInvoice(
 					id,
@@ -125,7 +126,11 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 					selectedPayment.payload,
 					YOOMONEY_TOKEN,
 					"RUB",
-					selectedPayment.prices
+					// @ts-ignore
+					selectedPayment.prices,
+					{
+						start_parameter: uuidv4(),
+					}
 				);
 
 				await bot.answerCallbackQuery(queryId);
