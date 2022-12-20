@@ -11,7 +11,6 @@ const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQ
 	try {
 		const { from } = query;
 		const { id } = from;
-		console.log("Pre_checkout_query=", query);
 
 		if (!repository[id]) {
 			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
