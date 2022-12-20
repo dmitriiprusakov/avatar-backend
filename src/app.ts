@@ -4,12 +4,12 @@ dotenv.config();
 import express from "express";
 import http from "http";
 
+import "./libs/i18next";
 import { initTelegramBot } from "./adapters/bot/telegram";
 import initRoutes from "./ports/http";
-import "./libs/i18next";
-
 import { UsersImagesLinks } from "./types";
 import { initExternalServices } from "./adapters/externals";
+import { logger } from "./logger";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
@@ -25,8 +25,10 @@ async function main() {
 		const repository: UsersImagesLinks = {};
 
 		server.listen(PORT, () => {
-			console.log("We are live on " + PORT);
-			console.log("IS_TESTING_BRANCH", IS_TESTING_BRANCH, !!IS_TESTING_BRANCH);
+			logger.log({
+				level: "info",
+				message: `We are live on ${PORT}, IS_TESTING_BRANCH = ${!!IS_TESTING_BRANCH}`,
+			});
 
 			const externals = initExternalServices();
 
@@ -35,7 +37,10 @@ async function main() {
 			initRoutes(app, bot);
 		});
 	} catch (error) {
-		console.log("ERROR EXECUTED: ", error);
+		logger.log({
+			level: "error",
+			message: `Global Error, ${error}`,
+		});
 	}
 }
 

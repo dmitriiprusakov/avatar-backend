@@ -4,6 +4,7 @@ import man_prompts from "../../../../resources/data/prompts/man.json";
 import woman_prompts from "../../../../resources/data/prompts/woman.json";
 
 import { Sex } from "../../../types";
+import { logger } from "../../../logger";
 
 const getPromptsForName = (name: Sex) => {
 	if (name === "woman") return woman_prompts;
@@ -27,31 +28,36 @@ const getRandom = (arr: any[], n: number) => {
 };
 
 export const createTune = async ({ chatId, username, name, image_urls, promptsAmount }: CreateTuneparams) => {
-	const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
-	const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
+	try {
+		const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
+		const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
 
-	const prompts_attributes = getPromptsForName(name).map(prompt => ({
-		text: prompt.text,
-		callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
-	}));
+		const prompts_attributes = getPromptsForName(name).map(prompt => ({
+			text: prompt.text,
+			callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
+		}));
 
-	const randomPrompts = getRandom(prompts_attributes, +promptsAmount);
-	console.log("randomPrompts", { randomPrompts });
+		const randomPrompts = getRandom(prompts_attributes, +promptsAmount);
 
-	const tune: Tune = {
-		title: username,
-		name,
-		callback: `${ASTRIA_CALLBACK_DOMAIN}/finetune?i=${chatId}`,
-		image_urls,
-		prompts_attributes: randomPrompts,
-	};
+		const tune: Tune = {
+			title: username,
+			name,
+			callback: `${ASTRIA_CALLBACK_DOMAIN}/finetune?i=${chatId}`,
+			image_urls,
+			prompts_attributes: randomPrompts,
+		};
 
-	if (IS_TESTING_BRANCH) {
-		tune.branch = "fast";
+		if (IS_TESTING_BRANCH) {
+			tune.branch = "fast";
+		}
+
+		await axiosAstria.post("/tunes", { tune });
+
+		logger.log("info", `T to A for ${chatId}`);
+	} catch (error) {
+		logger.log({
+			level: "error",
+			message: `Error, T for ${chatId}, ${error}`,
+		});
 	}
-
-	const { data } = await axiosAstria.post("/tunes", { tune });
-	console.log("createTune", { data });
-
-	return data;
 };

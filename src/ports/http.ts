@@ -1,4 +1,5 @@
 import { Application } from "express";
+import { logger } from "../logger";
 import TelegramBot, { InputMedia } from "node-telegram-bot-api";
 
 type PromptCallbackPayload = {
@@ -19,13 +20,17 @@ const initRoutes = (app: Application, bot: TelegramBot) => {
 		try {
 			const { i: chatId } = req.query;
 			if (!chatId) return res.send("No expected url params provided!");
-			console.log("Finetune-done", req.body);
 
 			await bot.sendMessage(chatId as string, "Почти готово!");
 
 			res.send("OK, Thanks for finetune, Astria! Waiting for prompts...");
+
+			logger.log("info", `T finished for ${chatId}`);
 		} catch (error) {
-			console.log("Error in finetune callback: ", error);
+			logger.log({
+				level: "error",
+				message: `Error, finishing T, ${error}`,
+			});
 		}
 	});
 
@@ -34,22 +39,25 @@ const initRoutes = (app: Application, bot: TelegramBot) => {
 			const { i: chatId } = req.query;
 			if (!chatId) return res.send("No expected url params provided!");
 
-			console.log("Prompt-done", req.body);
-
 			const prompt: PromptCallbackPayload = req.body.prompt;
 			const { images } = prompt;
 
 			const media = images.map<InputMedia>((imageUrl, index) => ({
 				type: "photo",
 				media: imageUrl,
-				caption: index === 0 ? "Один из стилей:" : undefined,
+				caption: index === 0 ? "Один из стилей ⬆️" : undefined,
 			}));
 
 			await bot.sendMediaGroup(chatId as string, media);
 
 			res.send("OK, Thanks for prompts, Astria! See ya!");
+
+			logger.log("info", `P finished for ${chatId}`);
 		} catch (error) {
-			console.log("Error in prompt callback: ", error);
+			logger.log({
+				level: "error",
+				message: `Error, finishing P, ${error}`,
+			});
 		}
 	});
 };

@@ -1,3 +1,4 @@
+import { logger } from "../../../../logger";
 import TelegramBot, { PreCheckoutQuery } from "node-telegram-bot-api";
 import { UsersImagesLinks } from "../../../../types";
 
@@ -17,9 +18,16 @@ const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQ
 			return;
 		}
 		await bot.answerPreCheckoutQuery(query.id, true);
+
+		logger.log({
+			level: "info",
+			message: `P_Q from ${id}`,
+		});
 	} catch (error) {
-		console.log("Error: ", error);
-		await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Что-то пошло не так!" });
+		logger.log({
+			level: "error",
+			message: `Error P_Q , ${error}`,
+		});
 	}
 };
 

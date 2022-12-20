@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { logger } from "../../../../logger";
 import TelegramBot, { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api";
 import { Sex, UsersImagesLinks } from "../../../../types";
 
@@ -68,55 +68,79 @@ type CallbackQueryListener = {
 	repository: UsersImagesLinks;
 }
 
-// TODO: editMessageReplyMarkup
 const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryListener) => {
 	try {
 		const { id: queryId, from, data } = query;
 		const { id } = from;
-		console.log("Callback_query=", query);
-		console.log("paymentsConfig.inline_keyboard=", paymentsConfig.inline_keyboard);
 
 		const [queryType, queryValue] = data.split("/");
 
 		if (!repository[id]) {
-			await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
-			return;
+			try {
+				await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C_Q from ${id}, ${error}`,
+				});
+			}
 		}
 
 		if (queryType === "sex") {
-			repository[id] = Object.assign(repository[id], { sex: queryValue as Sex });
-
-			await bot.sendMessage(
-				id,
-				"Сколько аватарок рисуем?",
-				{
-					reply_markup: {
-						inline_keyboard: paymentsConfig.inline_keyboard,
-					},
+			try {
+				if (!repository[id].sex) {
+					await bot.sendMessage(
+						id,
+						"Сколько аватарок рисуем?",
+						{
+							reply_markup: {
+								inline_keyboard: paymentsConfig.inline_keyboard,
+							},
+						}
+					);
 				}
-			);
-			await bot.answerCallbackQuery(queryId);
-			return;
+
+				repository[id] = Object.assign(repository[id], { sex: queryValue as Sex });
+
+				await bot.answerCallbackQuery(queryId);
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C_Q from ${id}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+				});
+			}
 		}
 
 		if (queryType === "payment") {
-			const selectedPayment = payments[queryValue];
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			await bot.sendInvoice(
-				id,
-				selectedPayment.title,
-				selectedPayment.description,
-				selectedPayment.payload,
-				YOOMONEY_TOKEN,
-				"RUB",
-				selectedPayment.prices
-			);
+			try {
+				const selectedPayment = payments[queryValue];
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				await bot.sendInvoice(
+					id,
+					selectedPayment.title,
+					selectedPayment.description,
+					selectedPayment.payload,
+					YOOMONEY_TOKEN,
+					"RUB",
+					selectedPayment.prices
+				);
 
-			await bot.answerCallbackQuery(queryId);
+				await bot.answerCallbackQuery(queryId);
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C_Q from ${id}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+				});
+			}
 		}
 	} catch (error) {
-		console.log("Error, callback query: ", error);
+		logger.log({
+			level: "error",
+			message: `Global Error C_Q , ${error}`,
+		});
 	}
 };
 

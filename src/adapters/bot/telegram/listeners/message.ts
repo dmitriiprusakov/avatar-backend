@@ -1,8 +1,9 @@
-import TelegramBot, { Message } from "node-telegram-bot-api";
+import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
 import { t } from "i18next";
 
 import { UsersImagesLinks } from "../../../../types";
 import { ExternalServices } from "../../../externals";
+import { logger } from "../../../../logger";
 
 const MIN_IMAGES_COUNT = 10;
 const MAX_IMAGES_COUNT = 30;
@@ -19,112 +20,180 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 		const { text, from, photo, document, successful_payment } = message;
 		const { is_bot, id, username } = from;
 
-		// console.log("Message=", message);
-
 		if (is_bot) return;
 
 		if (text === "/start") {
-			await bot.sendMessage(id, t("welcome", { lng: "ru" }));
-			return;
+			try {
+				const media = [
+					"https://www.dropbox.com/s/qjy2kzl2lpy6qj2/Group%2039%20%281%29.png?dl=0",
+					"https://www.dropbox.com/s/2t416n8zapt42gz/Group%2042.png?dl=0",
+				].map<InputMedia>((imageUrl, index) => ({
+					type: "photo",
+					media: imageUrl,
+					caption: index === 0 ? t("welcome", { lng: "ru" }) : undefined,
+				}));
+
+				await bot.sendMediaGroup(id, media);
+
+				logger.log({
+					level: "info",
+					message: `C /start from ${id}`,
+				});
+
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C /start from ${id}, ${error}`,
+				});
+			}
 		}
 
 		if (text === "/help") {
-			await bot.sendMessage(id, t("help", { lng: "ru" }));
-
-			return;
+			try {
+				await bot.sendMessage(id, t("help", { lng: "ru" }));
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C /help from ${id}, ${error}`,
+				});
+			}
 		}
 
 		if (text === "/draw") {
-			if (!repository[id] || !repository[id].links.length) {
-				await bot.sendMessage(
-					id,
-					"Пришлите фотографии, чтобы их затюнить!"
-				);
+			try {
+				if (!repository[id]?.links?.length) {
+					await bot.sendMessage(
+						id,
+						"Пришлите фотографии, чтобы их затюнить!"
+					);
+					return;
+				}
+
+				if (!repository[id].sex) {
+					await bot.sendMessage(
+						id,
+						"Кто на выбранных фотографиях?",
+						{
+							reply_markup: {
+								inline_keyboard: [
+									[{ text: "Женщина", callback_data: "sex/woman" }],
+									[{ text: "Мужчина", callback_data: "sex/man" }],
+								],
+							},
+						}
+					);
+				}
+
+				logger.log({
+					level: "info",
+					message: `C /draw from ${id}`,
+				});
+
 				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C /draw from ${id}, ${error}`,
+				});
 			}
-			// TODO: editMessageReplyMarkup
-			if (!repository[id].sex) {
-				await bot.sendMessage(
-					id,
-					"Кто на выбранных фотографиях?",
-					{
-						reply_markup: {
-							inline_keyboard: [
-								[{ text: "Женщина", callback_data: "sex/woman" }],
-								[{ text: "Мужчина", callback_data: "sex/man" }],
-							],
-						},
-					}
-				);
-				return;
-			}
-			return;
 		}
 
 		if (photo && photo.length) {
-			console.log({ photo });
+			try {
+				const maxSizeFile = photo.at(-1);
 
-			const maxSizeFile = photo.at(-1);
+				const photoLink = await bot.getFileLink(maxSizeFile.file_id);
 
-			const photoLink = await bot.getFileLink(maxSizeFile.file_id);
+				repository[id] = {
+					links: (repository[id]?.links || []).concat([photoLink]),
+				};
 
-			repository[id] = {
-				links: (repository[id]?.links || []).concat([photoLink]),
-			};
-
-			if (repository[id].links.length < MIN_IMAGES_COUNT) {
-				bot.sendMessage(
-					id,
-					`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
-				);
-			} else {
-				bot.sendMessage(
-					id,
-					`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
-				);
+				if (repository[id].links.length < MIN_IMAGES_COUNT) {
+					bot.sendMessage(
+						id,
+						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
+					);
+				} else {
+					bot.sendMessage(
+						id,
+						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
+					);
+				}
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, F from ${id}, ${error} ${repository[id]?.links.join(",")}`,
+				});
 			}
-			return;
+
 		}
 
 		if (document) {
-			const documentLink = await bot.getFileLink(document.file_id);
+			try {
+				const documentLink = await bot.getFileLink(document.file_id);
 
-			repository[id] = {
-				links: (repository[id]?.links || []).concat([documentLink]),
-			};
+				repository[id] = {
+					links: (repository[id]?.links || []).concat([documentLink]),
+				};
 
-			if (repository[id].links.length < MIN_IMAGES_COUNT) {
-				bot.sendMessage(
-					id,
-					`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
-				);
-			} else {
-				bot.sendMessage(
-					id,
-					`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
-				);
+				if (repository[id].links.length < MIN_IMAGES_COUNT) {
+					bot.sendMessage(
+						id,
+						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
+					);
+				} else {
+					bot.sendMessage(
+						id,
+						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
+					);
+				}
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, D from ${id}, ${error} ${repository[id]?.links.join(",")}`,
+				});
 			}
-			return;
 		}
 
 		if (successful_payment) {
-			console.log("Successful_payment=", successful_payment);
-			const { invoice_payload } = successful_payment;
-			await externals.astria.createTune({
-				chatId: id,
-				image_urls: repository[id].links,
-				name: repository[id].sex,
-				username,
-				promptsAmount: invoice_payload,
-			});
-			await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
-			delete repository[id];
-			return;
+			try {
+				const { invoice_payload } = successful_payment;
+
+				await externals.astria.createTune({
+					chatId: id,
+					image_urls: repository[id].links,
+					name: repository[id].sex,
+					username,
+					promptsAmount: invoice_payload,
+				});
+
+				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
+				delete repository[id];
+
+				logger.log({
+					level: "info",
+					message: `S_P from ${id}`,
+				});
+
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, S_P from ${id}, ${error}`,
+				});
+			}
 		}
 
-		bot.sendMessage(id, "Не совсем понял, что вы имеете ввиду!");
+		await bot.sendMessage(id, "Не совсем понял, что вы имеете ввиду!");
 	} catch (error) {
-		console.error("Error!:", error);
+		logger.log({
+			level: "error",
+			message: `Global Error M, ${error}`,
+		});
 	}
 };
 

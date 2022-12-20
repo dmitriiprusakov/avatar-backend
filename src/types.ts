@@ -2,6 +2,7 @@ export type Sex = "man" | "woman";
 
 export type UserData = {
 	sex?: Sex,
+	payment?: number,
 	links?: string[],
 }
 
