@@ -73,7 +73,7 @@ type CallbackQueryListener = {
 const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryListener) => {
 	try {
 		const { id: queryId, from, data } = query;
-		const { id, username } = from;
+		const { id, username = "anonymous" } = from;
 
 		const [queryType, queryValue] = data.split("/");
 

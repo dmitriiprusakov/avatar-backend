@@ -10,7 +10,7 @@ interface PreCheckoutQueryListener {
 const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQueryListener) => {
 	try {
 		const { from } = query;
-		const { id, username } = from;
+		const { id, username = "anonymous" } = from;
 
 		if (!repository[id]) {
 			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });

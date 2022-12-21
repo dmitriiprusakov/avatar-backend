@@ -18,6 +18,7 @@ const initTelegramBot = ({ repository = {}, externals }: initTelegramBot) => {
 	bot.setMyCommands([
 		{ command: "/start", description: "Начать" },
 		{ command: "/help", description: "Помощь" },
+		{ command: "/clear", description: "Сбросить загруженное" },
 	]);
 
 	initListeners({ bot, repository, externals });

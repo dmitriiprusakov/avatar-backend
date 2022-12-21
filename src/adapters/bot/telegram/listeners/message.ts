@@ -18,7 +18,7 @@ interface MessageListener {
 const messageListener = async ({ bot, message, repository, externals }: MessageListener) => {
 	try {
 		const { text, from, photo, document, successful_payment } = message;
-		const { is_bot, id, username } = from;
+		const { is_bot, id, username = "anonymous" } = from;
 
 		if (is_bot) return;
 
@@ -57,6 +57,19 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 				logger.log({
 					level: "error",
 					message: `Error, C /help from ${id} ${username}, ${error}`,
+				});
+			}
+		}
+
+		if (text === "/clear") {
+			try {
+				delete repository[id];
+				await bot.sendMessage(id, "Ранее загруженные фото убраны из набора, загрузите новые");
+				return;
+			} catch (error) {
+				logger.log({
+					level: "error",
+					message: `Error, C /clear from ${id} ${username}, ${error}`,
 				});
 			}
 		}
@@ -106,22 +119,33 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 				const photoLink = await bot.getFileLink(maxSizeFile.file_id);
 
-				repository[id] = {
-					links: (repository[id]?.links || []).concat([photoLink]),
-				};
+				if (!repository[id] || repository[id].links.length < MAX_IMAGES_COUNT) {
+					repository[id] = {
+						links: (repository[id]?.links || []).concat([photoLink]),
+					};
+				}
 
 				if (repository[id].links.length < MIN_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
 					);
-				} else {
+					return;
+				}
+				if (MIN_IMAGES_COUNT <= repository[id].links.length && repository[id].links.length < MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
 					);
+					return;
 				}
-				return;
+				if (repository[id].links.length === MAX_IMAGES_COUNT) {
+					bot.sendMessage(
+						id,
+						"Классные фотографии, уже максимальное количество, можно посылать на обработку /draw!"
+					);
+					return;
+				}
 			} catch (error) {
 				logger.log({
 					level: "error",
@@ -135,22 +159,33 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			try {
 				const documentLink = await bot.getFileLink(document.file_id);
 
-				repository[id] = {
-					links: (repository[id]?.links || []).concat([documentLink]),
-				};
+				if (!repository[id] || repository[id].links.length < MAX_IMAGES_COUNT) {
+					repository[id] = {
+						links: (repository[id]?.links || []).concat([documentLink]),
+					};
+				}
 
 				if (repository[id].links.length < MIN_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
 					);
-				} else {
+					return;
+				}
+				if (MIN_IMAGES_COUNT <= repository[id].links.length && repository[id].links.length < MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
 					);
+					return;
 				}
-				return;
+				if (repository[id].links.length === MAX_IMAGES_COUNT) {
+					bot.sendMessage(
+						id,
+						"Классные фотографии, уже максимальное количество, можно посылать на обработку /draw!"
+					);
+					return;
+				}
 			} catch (error) {
 				logger.log({
 					level: "error",

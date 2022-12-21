@@ -27,7 +27,7 @@ const getRandom = (arr: any[], n: number) => {
 	return result;
 };
 
-export const createTune = async ({ chatId, username, name, image_urls, promptsAmount }: CreateTuneparams) => {
+export const createTune = async ({ chatId, username = "anonymous", name, image_urls, promptsAmount }: CreateTuneparams) => {
 	try {
 		const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
 		const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
