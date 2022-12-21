@@ -34,8 +34,6 @@ async function main() {
 
 			const bot = initTelegramBot({ repository, externals });
 
-			// bot.sendMessage(808509780, "")
-
 			initRoutes(app, bot);
 		});
 	} catch (error) {

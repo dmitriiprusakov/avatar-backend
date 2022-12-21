@@ -80,12 +80,15 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 		if (!repository[id]) {
 			try {
 				await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
+				await bot.answerCallbackQuery(queryId);
+
 				return;
 			} catch (error) {
 				logger.log({
 					level: "error",
 					message: `Error, C_Q from ${id} ${username}, ${error}`,
 				});
+				await bot.answerCallbackQuery(queryId);
 			}
 		}
 
@@ -112,6 +115,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 					level: "error",
 					message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 				});
+				await bot.answerCallbackQuery(queryId);
 			}
 		}
 
@@ -139,6 +143,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 					level: "error",
 					message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 				});
+				await bot.answerCallbackQuery(queryId);
 			}
 		}
 	} catch (error) {

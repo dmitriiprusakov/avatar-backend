@@ -21,6 +21,9 @@ const initTelegramBot = ({ repository = {}, externals }: initTelegramBot) => {
 		{ command: "/clear", description: "Сбросить загруженное" },
 	]);
 
+	bot.sendMessage(1408833695, "Добрый день!\nВозникли небольшие неполадки, сделали возврат средств!\nПроблему решили, можете попробовать еще раз!");
+	bot.sendMessage(808509780, "Добрый день!\nВозникли небольшие неполадки, сделали возврат средств!\nПроблему решили, можете попробовать еще раз!");
+
 	initListeners({ bot, repository, externals });
 
 	return bot;
