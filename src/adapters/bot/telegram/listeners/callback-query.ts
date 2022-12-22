@@ -120,6 +120,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 		}
 
 		if (queryType === "payment") {
+			// FIXME: перед высылкой инвойса нужно чекнуть, что все данные есть, пол, фотки
 			try {
 				const selectedPayment = payments[queryValue];
 				// @ts-ignore

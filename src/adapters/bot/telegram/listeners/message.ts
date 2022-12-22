@@ -25,8 +25,9 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 		if (text === "/start") {
 			try {
 				const media = [
-					"https://www.dropbox.com/s/qjy2kzl2lpy6qj2/Group%2039%20%281%29.png?dl=0",
-					"https://www.dropbox.com/s/2t416n8zapt42gz/Group%2042.png?dl=0",
+					"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
+					"https://www.dropbox.com/s/dd4qgvvcz11y8m4/recommended.png?dl=0",
+					"https://www.dropbox.com/s/56zzg8b70yrx2ra/not_recommended.png?dl=0",
 				].map<InputMedia>((imageUrl, index) => ({
 					type: "photo",
 					media: imageUrl,
@@ -52,6 +53,12 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 		if (text === "/help") {
 			try {
 				await bot.sendMessage(id, t("help", { lng: "ru" }));
+
+				logger.log({
+					level: "info",
+					message: `C /help from ${id} ${username}`,
+				});
+
 				return;
 			} catch (error) {
 				logger.log({
@@ -65,6 +72,12 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			try {
 				delete repository[id];
 				await bot.sendMessage(id, "Ранее загруженные фото убраны из набора, загрузите новые");
+
+				logger.log({
+					level: "info",
+					message: `C /clear from ${id} ${username}`,
+				});
+
 				return;
 			} catch (error) {
 				logger.log({
