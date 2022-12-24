@@ -10,6 +10,7 @@ import initRoutes from "./ports/http";
 import { UsersImagesLinks } from "./types";
 import { initExternalServices } from "./adapters/externals";
 import { logger } from "./logger";
+import initFirestoreRepository from "./adapters/repository/firestore";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
@@ -29,6 +30,8 @@ async function main() {
 				level: "info",
 				message: `We are live on ${PORT}, IS_TESTING_BRANCH = ${!!IS_TESTING_BRANCH}`,
 			});
+
+			const repo = initFirestoreRepository();
 
 			const externals = initExternalServices();
 
