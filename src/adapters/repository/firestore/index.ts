@@ -1,24 +1,54 @@
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { FieldValue, Firestore, getFirestore } from "firebase-admin/firestore";
 
 import serviceAccount from "../../../../service-account.json";
+import { AddUserParams, UpdateUserLastImagesParams } from "./types";
 
-const initFirestoreRepository = async () => {
-	const app = initializeApp({
-		credential: cert(serviceAccount as ServiceAccount),
-	});
+class FirestoreRepository {
+	private readonly firestore: Firestore = null;
+	constructor() {
+		const app = initializeApp({
+			credential: cert(serviceAccount as ServiceAccount),
+		});
 
-	const firestoreDb = getFirestore(app);
+		this.firestore = getFirestore(app);
+	}
 
-	const docRef = firestoreDb.collection("users").doc("alovelace");
+	private users() {
+		return this.firestore.collection("users");
+	}
 
-	await docRef.set({
-		first: "Ada1231313123",
-		last: "Lovelace",
-		born: 1815,
-	});
+	private tunes() {
+		return this.firestore.collection("tunes");
+	}
 
-	return firestoreDb;
-};
+	async AddUser({ id, username, language_code }: AddUserParams) {
+		const docRef = this.users().doc(`${id}`);
 
-export default initFirestoreRepository;
+		return await docRef.set({
+			alias: username,
+			lng: language_code,
+			lastMsgTs: FieldValue.serverTimestamp(),
+		}, { merge: true });
+	}
+
+	async UpdateUserLastImages({ id, imageUrl }: UpdateUserLastImagesParams) {
+		const docRef = this.users().doc(`${id}`);
+
+		return await docRef.update({
+			last_images: FieldValue.arrayUnion(imageUrl),
+		});
+	}
+
+	// async AddImageToTune({ imageUrl }: AddImageToTuneParams) {
+	// 	const docRef = this.tunes().doc();
+
+	// 	return await docRef.set({
+	// 		username,
+	// 		lang: language_code,
+	// 		last_msg_ts: FieldValue.serverTimestamp(),
+	// 	}, { merge: true });
+	// }
+}
+
+export default FirestoreRepository;

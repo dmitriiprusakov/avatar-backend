@@ -67,17 +67,19 @@ const paymentsConfig = Object.keys(payments)
 type CallbackQueryListener = {
 	bot: TelegramBot;
 	query: CallbackQuery;
-	repository: UsersImagesLinks;
+	cache: UsersImagesLinks;
 }
 
-const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryListener) => {
+const callbackQueryListener = async ({ bot, query, cache }: CallbackQueryListener) => {
 	try {
 		const { id: queryId, from, data } = query;
-		const { id, username = "anonymous" } = from;
+		const { id, is_bot, username = "anonymous" } = from;
+
+		if (is_bot) return;
 
 		const [queryType, queryValue] = data.split("/");
 
-		if (!repository[id]) {
+		if (!cache[id]) {
 			try {
 				await bot.sendMessage(id, "Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!");
 				await bot.answerCallbackQuery(queryId);
@@ -94,7 +96,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 
 		if (queryType === "sex") {
 			try {
-				if (!repository[id].sex) {
+				if (!cache[id].sex) {
 					await bot.sendMessage(
 						id,
 						"Сколько аватарок рисуем?",
@@ -106,7 +108,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 					);
 				}
 
-				repository[id] = Object.assign(repository[id], { sex: queryValue as Sex });
+				cache[id] = Object.assign(cache[id], { sex: queryValue as Sex });
 
 				await bot.answerCallbackQuery(queryId);
 				return;
@@ -124,7 +126,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 			try {
 				const selectedPayment = payments[queryValue];
 				// @ts-ignore
-				await bot.sendInvoice(
+				const mess = await bot.sendInvoice(
 					id,
 					selectedPayment.title,
 					selectedPayment.description,
@@ -137,6 +139,7 @@ const callbackQueryListener = async ({ bot, query, repository }: CallbackQueryLi
 						start_parameter: uuidv4(),
 					}
 				);
+				console.log("payment mess=", mess);
 
 				await bot.answerCallbackQuery(queryId);
 			} catch (error) {

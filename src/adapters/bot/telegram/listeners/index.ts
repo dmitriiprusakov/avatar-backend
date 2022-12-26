@@ -5,25 +5,27 @@ import { callbackQueryListener } from "./callback-query";
 import { messageListener } from "./message";
 import { preCheckoutQueryListener } from "./pre-checkout-query";
 import { UsersImagesLinks } from "../../../../types";
+import { FirestoreRepository } from "../../../../adapters/repository";
 
 interface InitListeners {
 	bot: TelegramBot,
-	repository: UsersImagesLinks,
+	cache: UsersImagesLinks,
+	repository: FirestoreRepository,
 	externals?: ExternalServices
 }
 
-const initListeners = ({ bot, repository, externals }: InitListeners) => {
+const initListeners = ({ bot, cache, repository, externals }: InitListeners) => {
 	bot.on(
-		"pre_checkout_query",
-		(query) => preCheckoutQueryListener({ bot, query, repository })
+		"message",
+		(message) => messageListener({ bot, message, cache, repository, externals })
 	);
 	bot.on(
 		"callback_query",
-		(query) => callbackQueryListener({ bot, query, repository })
+		(query) => callbackQueryListener({ bot, query, cache })
 	);
 	bot.on(
-		"message",
-		(message) => messageListener({ bot, message, repository, externals })
+		"pre_checkout_query",
+		(query) => preCheckoutQueryListener({ bot, query, cache })
 	);
 };
 

@@ -1,9 +1,10 @@
 import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
 import { t } from "i18next";
 
-import { UsersImagesLinks } from "../../../../types";
 import { ExternalServices } from "../../../externals";
 import { logger } from "../../../../logger";
+import { FirestoreRepository } from "../../../../adapters/repository";
+import { UsersImagesLinks } from "../../../../types";
 
 const MIN_IMAGES_COUNT = 10;
 const MAX_IMAGES_COUNT = 30;
@@ -11,11 +12,12 @@ const MAX_IMAGES_COUNT = 30;
 interface MessageListener {
 	bot: TelegramBot,
 	message: Message,
-	repository: UsersImagesLinks,
+	cache: UsersImagesLinks,
+	repository: FirestoreRepository,
 	externals: ExternalServices
 }
 
-const messageListener = async ({ bot, message, repository, externals }: MessageListener) => {
+const messageListener = async ({ bot, message, cache, repository, externals }: MessageListener) => {
 	try {
 		const { text, from, photo, document, successful_payment } = message;
 		const { is_bot, id, username = "anonymous" } = from;
@@ -35,6 +37,8 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 				}));
 
 				await bot.sendMediaGroup(id, media);
+
+				repository.AddUser({ id, username });
 
 				logger.log({
 					level: "info",
@@ -70,7 +74,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 		if (text === "/clear") {
 			try {
-				delete repository[id];
+				delete cache[id];
 				await bot.sendMessage(id, "Ранее загруженные фото убраны из набора, загрузите новые");
 
 				logger.log({
@@ -89,7 +93,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 		if (text === "/draw") {
 			try {
-				if (!repository[id]?.links?.length) {
+				if (!cache[id]?.links?.length) {
 					await bot.sendMessage(
 						id,
 						"Пришлите фотографии, чтобы их затюнить!"
@@ -97,7 +101,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 					return;
 				}
 
-				if (!repository[id].sex) {
+				if (!cache[id].sex) {
 					await bot.sendMessage(
 						id,
 						"Кто на выбранных фотографиях?",
@@ -132,27 +136,27 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 				const photoLink = await bot.getFileLink(maxSizeFile.file_id);
 
-				if (!repository[id] || repository[id].links.length < MAX_IMAGES_COUNT) {
-					repository[id] = {
-						links: (repository[id]?.links || []).concat([photoLink]),
+				if (!cache[id] || cache[id].links.length < MAX_IMAGES_COUNT) {
+					cache[id] = {
+						links: (cache[id]?.links || []).concat([photoLink]),
 					};
 				}
 
-				if (repository[id].links.length < MIN_IMAGES_COUNT) {
+				if (cache[id].links.length < MIN_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
-						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
+						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - cache[id].links.length}!`
 					);
 					return;
 				}
-				if (MIN_IMAGES_COUNT <= repository[id].links.length && repository[id].links.length < MAX_IMAGES_COUNT) {
+				if (MIN_IMAGES_COUNT <= cache[id].links.length && cache[id].links.length < MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
-						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
+						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - cache[id].links.length}!`
 					);
 					return;
 				}
-				if (repository[id].links.length === MAX_IMAGES_COUNT) {
+				if (cache[id].links.length === MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						"Классные фотографии, уже максимальное количество, можно посылать на обработку /draw!"
@@ -162,7 +166,7 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, F from ${id} ${username}, ${error} ${repository[id]?.links.join(",")}`,
+					message: `Error, F from ${id} ${username}, ${error} ${cache[id]?.links.join(",")}`,
 				});
 			}
 
@@ -172,27 +176,27 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			try {
 				const documentLink = await bot.getFileLink(document.file_id);
 
-				if (!repository[id] || repository[id].links.length < MAX_IMAGES_COUNT) {
-					repository[id] = {
-						links: (repository[id]?.links || []).concat([documentLink]),
+				if (!cache[id] || cache[id].links.length < MAX_IMAGES_COUNT) {
+					cache[id] = {
+						links: (cache[id]?.links || []).concat([documentLink]),
 					};
 				}
 
-				if (repository[id].links.length < MIN_IMAGES_COUNT) {
+				if (cache[id].links.length < MIN_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
-						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - repository[id].links.length}!`
+						`Отличная фотка, но нужно еще ${MIN_IMAGES_COUNT - cache[id].links.length}!`
 					);
 					return;
 				}
-				if (MIN_IMAGES_COUNT <= repository[id].links.length && repository[id].links.length < MAX_IMAGES_COUNT) {
+				if (MIN_IMAGES_COUNT <= cache[id].links.length && cache[id].links.length < MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
-						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - repository[id].links.length}!`
+						`Классные фотографии, уже можно посылать на обработку /draw, а можно добавить больше фотографий, еще ${MAX_IMAGES_COUNT - cache[id].links.length}!`
 					);
 					return;
 				}
-				if (repository[id].links.length === MAX_IMAGES_COUNT) {
+				if (cache[id].links.length === MAX_IMAGES_COUNT) {
 					bot.sendMessage(
 						id,
 						"Классные фотографии, уже максимальное количество, можно посылать на обработку /draw!"
@@ -202,14 +206,13 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 			} catch (error) {
 				logger.log({
 					level: "error",
-					message: `Error, D from ${id} ${username}, ${error} ${repository[id]?.links.join(",")}`,
+					message: `Error, D from ${id} ${username}, ${error} ${cache[id]?.links.join(",")}`,
 				});
 			}
 		}
 
 		if (successful_payment) {
 			try {
-
 				logger.log({
 					level: "info",
 					message: `S_P from ${id} ${username}`,
@@ -217,14 +220,14 @@ const messageListener = async ({ bot, message, repository, externals }: MessageL
 
 				await externals.astria.createTune({
 					chatId: id,
-					image_urls: repository[id].links,
-					name: repository[id].sex,
+					image_urls: cache[id].links,
+					name: cache[id].sex,
 					username,
 					promptsAmount: successful_payment.invoice_payload,
 				});
 
 				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
-				delete repository[id];
+				delete cache[id];
 
 				return;
 			} catch (error) {

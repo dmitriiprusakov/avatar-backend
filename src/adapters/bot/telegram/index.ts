@@ -2,17 +2,19 @@ import TelegramBotApi from "node-telegram-bot-api";
 
 import initListeners from "./listeners";
 
-import { UsersImagesLinks } from "../../../types";
 import { ExternalServices } from "../../externals";
+import { FirestoreRepository } from "../../../adapters/repository";
+import { UsersImagesLinks } from "../../../types";
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
 interface initTelegramBot {
+	cache?: UsersImagesLinks
+	repository?: FirestoreRepository
 	externals?: ExternalServices,
-	repository?: UsersImagesLinks
 }
 
-const initTelegramBot = ({ repository = {}, externals }: initTelegramBot) => {
+const initTelegramBot = ({ cache, repository = null, externals }: initTelegramBot) => {
 	const bot = new TelegramBotApi(BOT_TOKEN, { polling: true });
 
 	bot.setMyCommands([
@@ -21,7 +23,7 @@ const initTelegramBot = ({ repository = {}, externals }: initTelegramBot) => {
 		{ command: "/clear", description: "Сбросить загруженное" },
 	]);
 
-	initListeners({ bot, repository, externals });
+	initListeners({ bot, cache, repository, externals });
 
 	return bot;
 };

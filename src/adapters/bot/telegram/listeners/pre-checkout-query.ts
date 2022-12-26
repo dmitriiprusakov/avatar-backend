@@ -5,14 +5,16 @@ import { UsersImagesLinks } from "../../../../types";
 interface PreCheckoutQueryListener {
 	bot: TelegramBot,
 	query: PreCheckoutQuery,
-	repository: UsersImagesLinks
+	cache: UsersImagesLinks
 }
-const preCheckoutQueryListener = async ({ bot, query, repository }: PreCheckoutQueryListener) => {
+const preCheckoutQueryListener = async ({ bot, query, cache }: PreCheckoutQueryListener) => {
 	try {
 		const { from } = query;
-		const { id, username = "anonymous" } = from;
+		const { id, is_bot, username = "anonymous" } = from;
 
-		if (!repository[id]) {
+		if (is_bot) return;
+
+		if (!cache[id]) {
 			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
 			return;
 		}

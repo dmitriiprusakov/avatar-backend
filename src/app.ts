@@ -7,10 +7,10 @@ import http from "http";
 import "./libs/i18next";
 import { initTelegramBot } from "./adapters/bot/telegram";
 import initRoutes from "./ports/http";
-import { UsersImagesLinks } from "./types";
 import { initExternalServices } from "./adapters/externals";
 import { logger } from "./logger";
-import initFirestoreRepository from "./adapters/repository/firestore";
+import { FirestoreRepository } from "./adapters/repository";
+import { UsersImagesLinks } from "./types";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
@@ -23,7 +23,7 @@ async function main() {
 	try {
 		const server = http.createServer(app);
 
-		const repository: UsersImagesLinks = {};
+		const cache: UsersImagesLinks = {};
 
 		server.listen(PORT, () => {
 			logger.log({
@@ -31,11 +31,11 @@ async function main() {
 				message: `We are live on ${PORT}, IS_TESTING_BRANCH = ${!!IS_TESTING_BRANCH}`,
 			});
 
-			const repo = initFirestoreRepository();
+			const repository = new FirestoreRepository();
 
 			const externals = initExternalServices();
 
-			const bot = initTelegramBot({ repository, externals });
+			const bot = initTelegramBot({ cache, repository, externals });
 
 			initRoutes(app, bot);
 		});
