@@ -8,6 +8,8 @@ i18next
 	.init({
 		debug: process.env.DEBUG_I18NEXT === "true",
 
+		initImmediate: false,
+
 		fallbackLng: "en",
 		lng: "en",
 		preload: ["en", "ru"],
