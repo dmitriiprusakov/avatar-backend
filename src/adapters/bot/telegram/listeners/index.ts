@@ -4,20 +4,21 @@ import TelegramBot from "node-telegram-bot-api";
 import { callbackQueryListener } from "./callback-query";
 import { messageListener } from "./message";
 import { preCheckoutQueryListener } from "./pre-checkout-query";
-import { UsersImagesLinks } from "../../../../types";
+import { Cache, MessagesCache } from "../../../../types";
 import { FirestoreRepository } from "../../../../adapters/repository";
 
 interface InitListeners {
 	bot: TelegramBot,
-	cache: UsersImagesLinks,
+	cache: Cache,
+	messagesCache: MessagesCache,
 	repository: FirestoreRepository,
 	externals?: ExternalServices
 }
 
-const initListeners = ({ bot, cache, repository, externals }: InitListeners) => {
+const initListeners = ({ bot, cache, messagesCache, repository, externals }: InitListeners) => {
 	bot.on(
 		"message",
-		(message) => messageListener({ bot, message, cache, repository, externals })
+		(message) => messageListener({ bot, message, cache, messagesCache, repository, externals })
 	);
 	bot.on(
 		"callback_query",

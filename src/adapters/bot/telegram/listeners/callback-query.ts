@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { logger } from "../../../../logger";
 import TelegramBot, { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api";
-import { Sex, UsersImagesLinks } from "../../../../types";
+import { Cache, Sex } from "../../../../types";
 import { v4 as uuidv4 } from "uuid";
 
 const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
@@ -67,7 +67,7 @@ const paymentsConfig = Object.keys(payments)
 type CallbackQueryListener = {
 	bot: TelegramBot;
 	query: CallbackQuery;
-	cache: UsersImagesLinks;
+	cache: Cache;
 }
 
 const callbackQueryListener = async ({ bot, query, cache }: CallbackQueryListener) => {

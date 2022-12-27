@@ -1,76 +1,34 @@
-import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
-import { t } from "i18next";
+import TelegramBot, { Message } from "node-telegram-bot-api";
 
-import { ExternalServices } from "../../../externals";
-import { logger } from "../../../../logger";
-import { FirestoreRepository } from "../../../../adapters/repository";
-import { UsersImagesLinks } from "../../../../types";
+import { ExternalServices } from "../../../../externals";
+import { logger } from "../../../../../logger";
+import { FirestoreRepository } from "../../../../../adapters/repository";
+import { Cache, MessagesCache } from "../../../../../types";
+import { startHandler } from "./start";
+import { helpHandler } from "./help";
 
-const MIN_IMAGES_COUNT = 10;
-const MAX_IMAGES_COUNT = 30;
+const MIN_IMAGES_COUNT = 5;
+const MAX_IMAGES_COUNT = 15;
 
 interface MessageListener {
 	bot: TelegramBot,
 	message: Message,
-	cache: UsersImagesLinks,
+	cache: Cache,
+	messagesCache: MessagesCache,
 	repository: FirestoreRepository,
 	externals: ExternalServices
 }
 
-const messageListener = async ({ bot, message, cache, repository, externals }: MessageListener) => {
+const messageListener = async ({ bot, message, cache, messagesCache, repository, externals }: MessageListener) => {
 	try {
 		const { text, from, photo, document, successful_payment } = message;
 		const { is_bot, id, username = "anonymous" } = from;
 
 		if (is_bot) return;
 
-		if (text === "/start") {
-			try {
-				const media = [
-					"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
-					"https://www.dropbox.com/s/dd4qgvvcz11y8m4/recommended.png?dl=0",
-					"https://www.dropbox.com/s/56zzg8b70yrx2ra/not_recommended.png?dl=0",
-				].map<InputMedia>((imageUrl, index) => ({
-					type: "photo",
-					media: imageUrl,
-					caption: index === 0 ? t("welcome", { lng: "ru" }) : undefined,
-				}));
+		if (text === "/start") return startHandler({ bot, repository, message });
 
-				await bot.sendMediaGroup(id, media);
-
-				repository.AddUser({ id, username });
-
-				logger.log({
-					level: "info",
-					message: `C /start from ${id} ${username}`,
-				});
-
-				return;
-			} catch (error) {
-				logger.log({
-					level: "error",
-					message: `Error, C /start from ${id} ${username}, ${error}`,
-				});
-			}
-		}
-
-		if (text === "/help") {
-			try {
-				await bot.sendMessage(id, t("help", { lng: "ru" }));
-
-				logger.log({
-					level: "info",
-					message: `C /help from ${id} ${username}`,
-				});
-
-				return;
-			} catch (error) {
-				logger.log({
-					level: "error",
-					message: `Error, C /help from ${id} ${username}, ${error}`,
-				});
-			}
-		}
+		if (text === "/help") return helpHandler({ bot, message });
 
 		if (text === "/clear") {
 			try {

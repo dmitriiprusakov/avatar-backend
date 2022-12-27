@@ -39,16 +39,6 @@ class FirestoreRepository {
 			last_images: FieldValue.arrayUnion(imageUrl),
 		});
 	}
-
-	// async AddImageToTune({ imageUrl }: AddImageToTuneParams) {
-	// 	const docRef = this.tunes().doc();
-
-	// 	return await docRef.set({
-	// 		username,
-	// 		lang: language_code,
-	// 		last_msg_ts: FieldValue.serverTimestamp(),
-	// 	}, { merge: true });
-	// }
 }
 
 export default FirestoreRepository;

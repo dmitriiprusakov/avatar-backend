@@ -1,11 +1,11 @@
 import { logger } from "../../../../logger";
 import TelegramBot, { PreCheckoutQuery } from "node-telegram-bot-api";
-import { UsersImagesLinks } from "../../../../types";
+import { Cache } from "../../../../types";
 
 interface PreCheckoutQueryListener {
 	bot: TelegramBot,
 	query: PreCheckoutQuery,
-	cache: UsersImagesLinks
+	cache: Cache
 }
 const preCheckoutQueryListener = async ({ bot, query, cache }: PreCheckoutQueryListener) => {
 	try {
@@ -15,7 +15,10 @@ const preCheckoutQueryListener = async ({ bot, query, cache }: PreCheckoutQueryL
 		if (is_bot) return;
 
 		if (!cache[id]) {
-			await bot.answerPreCheckoutQuery(query.id, false, { error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" });
+			await bot.answerPreCheckoutQuery(
+				query.id, false,
+				{ error_message: "Этот заказ уже оплачен. Чтобы заказать еще больше стильных аватарок, загрузите новые фотографии!" }
+			);
 			return;
 		}
 		await bot.answerPreCheckoutQuery(query.id, true);

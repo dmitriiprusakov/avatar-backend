@@ -1,16 +1,17 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import "./libs/i18next";
+
 import express from "express";
 import http from "http";
 
-import "./libs/i18next";
 import { initTelegramBot } from "./adapters/bot/telegram";
 import initRoutes from "./ports/http";
 import { initExternalServices } from "./adapters/externals";
 import { logger } from "./logger";
 import { FirestoreRepository } from "./adapters/repository";
-import { UsersImagesLinks } from "./types";
+import { Cache, MessagesCache } from "./types";
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
@@ -20,10 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 async function main() {
+
 	try {
 		const server = http.createServer(app);
 
-		const cache: UsersImagesLinks = {};
+		const cache: Cache = {};
+
+		const messagesCache: MessagesCache = {};
 
 		server.listen(PORT, () => {
 			logger.log({
@@ -35,7 +39,7 @@ async function main() {
 
 			const externals = initExternalServices();
 
-			const bot = initTelegramBot({ cache, repository, externals });
+			const bot = initTelegramBot({ cache, messagesCache, repository, externals });
 
 			initRoutes(app, bot);
 		});
