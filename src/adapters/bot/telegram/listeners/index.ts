@@ -6,6 +6,7 @@ import { messageListener } from "./message";
 import { preCheckoutQueryListener } from "./pre-checkout-query";
 import { Cache, MessagesCache } from "../../../../types";
 import { FirestoreRepository } from "../../../../adapters/repository";
+import { successfulPaymentListener } from "./successful-payment";
 
 interface InitListeners {
 	bot: TelegramBot,
@@ -27,6 +28,10 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals }: Ini
 	bot.on(
 		"pre_checkout_query",
 		(query) => preCheckoutQueryListener({ bot, query, cache })
+	);
+	bot.on(
+		"successful_payment",
+		(payment) => successfulPaymentListener({ bot, payment, cache, externals })
 	);
 };
 

@@ -6,6 +6,8 @@ import { FirestoreRepository } from "../../../../../adapters/repository";
 import { Cache, MessagesCache } from "../../../../../types";
 import { startHandler } from "./start";
 import { helpHandler } from "./help";
+import { clearHandler } from "./clear";
+import { drawHandler } from "./draw";
 
 const MIN_IMAGES_COUNT = 5;
 const MAX_IMAGES_COUNT = 15;
@@ -21,7 +23,7 @@ interface MessageListener {
 
 const messageListener = async ({ bot, message, cache, messagesCache, repository, externals }: MessageListener) => {
 	try {
-		const { text, from, photo, document, successful_payment } = message;
+		const { text, from, photo, document } = message;
 		const { is_bot, id, username = "anonymous" } = from;
 
 		if (is_bot) return;
@@ -30,63 +32,9 @@ const messageListener = async ({ bot, message, cache, messagesCache, repository,
 
 		if (text === "/help") return helpHandler({ bot, message });
 
-		if (text === "/clear") {
-			try {
-				delete cache[id];
-				await bot.sendMessage(id, "Ранее загруженные фото убраны из набора, загрузите новые");
+		if (text === "/clear") return clearHandler({ bot, message, cache });
 
-				logger.log({
-					level: "info",
-					message: `C /clear from ${id} ${username}`,
-				});
-
-				return;
-			} catch (error) {
-				logger.log({
-					level: "error",
-					message: `Error, C /clear from ${id} ${username}, ${error}`,
-				});
-			}
-		}
-
-		if (text === "/draw") {
-			try {
-				if (!cache[id]?.links?.length) {
-					await bot.sendMessage(
-						id,
-						"Пришлите фотографии, чтобы их затюнить!"
-					);
-					return;
-				}
-
-				if (!cache[id].sex) {
-					await bot.sendMessage(
-						id,
-						"Кто на выбранных фотографиях?",
-						{
-							reply_markup: {
-								inline_keyboard: [
-									[{ text: "Женщина", callback_data: "sex/woman" }],
-									[{ text: "Мужчина", callback_data: "sex/man" }],
-								],
-							},
-						}
-					);
-				}
-
-				logger.log({
-					level: "info",
-					message: `C /draw from ${id} ${username}`,
-				});
-
-				return;
-			} catch (error) {
-				logger.log({
-					level: "error",
-					message: `Error, C /draw from ${id} ${username}, ${error}`,
-				});
-			}
-		}
+		if (text === "/draw") return drawHandler({ bot, message, cache });
 
 		if (photo && photo.length) {
 			try {
@@ -165,33 +113,6 @@ const messageListener = async ({ bot, message, cache, messagesCache, repository,
 				logger.log({
 					level: "error",
 					message: `Error, D from ${id} ${username}, ${error} ${cache[id]?.links.join(",")}`,
-				});
-			}
-		}
-
-		if (successful_payment) {
-			try {
-				logger.log({
-					level: "info",
-					message: `S_P from ${id} ${username}`,
-				});
-
-				await externals.astria.createTune({
-					chatId: id,
-					image_urls: cache[id].links,
-					name: cache[id].sex,
-					username,
-					promptsAmount: successful_payment.invoice_payload,
-				});
-
-				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
-				delete cache[id];
-
-				return;
-			} catch (error) {
-				logger.log({
-					level: "error",
-					message: `Error, S_P from ${id} ${username}, ${error}`,
 				});
 			}
 		}
