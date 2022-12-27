@@ -54,7 +54,7 @@ export const sexQueryHandler = async ({ bot, query, cache }: SexQueryParams) => 
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+			message: `Error, sex C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 		});
 		await bot.answerCallbackQuery(queryId);
 	}

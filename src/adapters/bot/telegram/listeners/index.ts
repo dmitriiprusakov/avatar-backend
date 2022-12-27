@@ -7,6 +7,8 @@ import { preCheckoutQueryListener } from "./pre-checkout-query";
 import { Cache, MessagesCache } from "../../../../types";
 import { FirestoreRepository } from "../../../../adapters/repository";
 import { successfulPaymentListener } from "./successful-payment";
+import { photoListener } from "./photo";
+import { documentListener } from "./document";
 
 interface InitListeners {
 	bot: TelegramBot,
@@ -18,8 +20,8 @@ interface InitListeners {
 
 const initListeners = ({ bot, cache, messagesCache, repository, externals }: InitListeners) => {
 	bot.on(
-		"message",
-		(message) => messageListener({ bot, message, cache, messagesCache, repository, externals })
+		"text",
+		(message) => messageListener({ bot, message, cache, messagesCache, repository })
 	);
 	bot.on(
 		"callback_query",
@@ -27,11 +29,19 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals }: Ini
 	);
 	bot.on(
 		"pre_checkout_query",
-		(query) => preCheckoutQueryListener({ bot, query, cache })
+		(query) => preCheckoutQueryListener({ bot, query })
 	);
 	bot.on(
 		"successful_payment",
-		(payment) => successfulPaymentListener({ bot, payment, cache, externals })
+		(message) => successfulPaymentListener({ bot, message, cache, externals })
+	);
+	bot.on(
+		"photo",
+		(message) => photoListener({ bot, cache, message })
+	);
+	bot.on(
+		"document",
+		(message) => documentListener({ bot, cache, message })
 	);
 };
 

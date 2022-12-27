@@ -38,7 +38,7 @@ export const paymentQueryHandler = async ({ bot, query }: PaymentQueryParams) =>
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
+			message: `Error, payment C_Q from ${id} ${username}, Q_T ${queryType}, Q_V ${queryValue}, ${error}`,
 		});
 		await bot.answerCallbackQuery(queryId);
 	}

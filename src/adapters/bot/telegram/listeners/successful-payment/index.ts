@@ -6,14 +6,14 @@ import { Cache } from "../../../../../types";
 
 interface SuccessfulPaymentListener {
 	bot: TelegramBot,
-	payment: Message,
+	message: Message,
 	cache: Cache,
 	externals: ExternalServices
 }
 
-const successfulPaymentListener = async ({ bot, payment, cache, externals }: SuccessfulPaymentListener) => {
+const successfulPaymentListener = async ({ bot, message, cache, externals }: SuccessfulPaymentListener) => {
 	try {
-		const { from, successful_payment } = payment;
+		const { from, successful_payment } = message;
 		const { is_bot, id, username = "anonymous" } = from;
 
 		if (is_bot) return;
@@ -44,8 +44,6 @@ const successfulPaymentListener = async ({ bot, payment, cache, externals }: Suc
 				});
 			}
 		}
-
-		await bot.sendMessage(id, "Не совсем понял, что вы имеете ввиду!");
 	} catch (error) {
 		logger.log({
 			level: "error",
