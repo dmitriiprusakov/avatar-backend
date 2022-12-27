@@ -9,9 +9,10 @@ import { logger } from "../../../logger";
 const getPromptsForName = (name: Sex) => {
 	if (name === "woman") return woman_prompts;
 	if (name === "man") return man_prompts;
+	return [];
 };
 
-const getRandom = (arr: any[], n: number) => {
+const getRandom = (arr: unknown[], n: number) => {
 	const result = new Array(n);
 	let len = arr.length;
 	const taken = new Array(len);

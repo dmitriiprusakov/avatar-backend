@@ -1,22 +1,46 @@
 {
     "env": {
-        "browser": true,
+        "node": true,
         "es2021": true
     },
     "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/eslint-recommended"
     ],
-    "overrides": [],
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "tsconfig.json",
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": [
-        "@typescript-eslint"
-    ],
+    "overrides": [],
+    "settings": {
+        "import/extensions": [
+            ".ts"
+        ],
+        "import/parsers": {
+            "@typescript-eslint/parser": [
+                ".ts"
+            ]
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".ts"
+                ],
+                "paths": [
+                    "src"
+                ]
+            },
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": "tsconfig.json"
+            }
+        }
+    },
     "rules": {
         "indent": [
             "error",
