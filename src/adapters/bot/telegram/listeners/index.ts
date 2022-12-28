@@ -1,14 +1,14 @@
-import { ExternalServices } from "../../../externals";
+import { ExternalServices } from "adapters/externals";
+import { FirestoreRepository } from "adapters/repository";
 import TelegramBot from "node-telegram-bot-api";
+import { Cache, MessagesCache } from "types";
 
 import { callbackQueryListener } from "./callback-query";
-import { messageListener } from "./message";
-import { preCheckoutQueryListener } from "./pre-checkout-query";
-import { Cache, MessagesCache } from "../../../../types";
-import { FirestoreRepository } from "../../../../adapters/repository";
-import { successfulPaymentListener } from "./successful-payment";
-import { photoListener } from "./photo";
 import { documentListener } from "./document";
+import { messageListener } from "./message";
+import { photoListener } from "./photo";
+import { preCheckoutQueryListener } from "./pre-checkout-query";
+import { successfulPaymentListener } from "./successful-payment";
 
 interface InitListeners {
 	bot: TelegramBot,
@@ -17,7 +17,6 @@ interface InitListeners {
 	repository: FirestoreRepository,
 	externals?: ExternalServices
 }
-
 const initListeners = ({ bot, cache, messagesCache, repository, externals }: InitListeners) => {
 	bot.on(
 		"text",

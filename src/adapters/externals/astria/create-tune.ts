@@ -1,10 +1,10 @@
-import { axiosAstria } from ".";
-import { CreateTuneparams, Tune } from "./types";
+import { logger } from "logger";
+import { Sex } from "types";
+
 import man_prompts from "../../../../resources/data/prompts/man.json";
 import woman_prompts from "../../../../resources/data/prompts/woman.json";
-
-import { Sex } from "../../../types";
-import { logger } from "../../../logger";
+import { axiosAstria } from ".";
+import { CreateTuneparams, Tune } from "./types";
 
 const getPromptsForName = (name: Sex) => {
 	if (name === "woman") return woman_prompts;
@@ -33,12 +33,12 @@ export const createTune = async ({ chatId, username = "anonymous", name, image_u
 		const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
 		const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
 
-		const prompts_attributes = getPromptsForName(name).map(prompt => ({
+		const promptsForName = getPromptsForName(name).map(prompt => ({
 			text: prompt.text,
 			callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
 		}));
 
-		const randomPrompts = getRandom(prompts_attributes, +promptsAmount);
+		const randomPrompts = getRandom(promptsForName, +promptsAmount);
 
 		const tune: Tune = {
 			title: username,

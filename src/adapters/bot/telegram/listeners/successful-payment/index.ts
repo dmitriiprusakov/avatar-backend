@@ -1,8 +1,7 @@
+import { ExternalServices } from "adapters/externals";
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-
-import { ExternalServices } from "../../../../externals";
-import { logger } from "../../../../../logger";
-import { Cache } from "../../../../../types";
+import { Cache } from "types";
 
 interface SuccessfulPaymentListener {
 	bot: TelegramBot,

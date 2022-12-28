@@ -1,4 +1,4 @@
-import { Sex } from "../../../types";
+import { Sex } from "types";
 
 export interface Astria {
     createTune: ({ chatId, username, name, image_urls, promptsAmount }: CreateTuneparams) => Promise<any>

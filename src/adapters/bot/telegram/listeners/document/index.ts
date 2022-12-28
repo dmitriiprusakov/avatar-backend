@@ -1,6 +1,6 @@
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import { Cache } from "../../../../../types";
-import { logger } from "../../../../../logger";
+import { Cache } from "types";
 
 const MIN_IMAGES_COUNT = 5;
 const MAX_IMAGES_COUNT = 15;

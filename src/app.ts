@@ -1,17 +1,17 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import "./libs/i18next";
 
+import { initExternalServices } from "adapters/externals";
+import { FirestoreRepository } from "adapters/repository";
+import * as dotenv from "dotenv";
 import express from "express";
 import http from "http";
+import { logger } from "logger";
+import initRoutes from "ports/http";
 
 import { initTelegramBot } from "./adapters/bot/telegram";
-import initRoutes from "./ports/http";
-import { initExternalServices } from "./adapters/externals";
-import { logger } from "./logger";
-import { FirestoreRepository } from "./adapters/repository";
 import { Cache, MessagesCache } from "./types";
+
+dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;

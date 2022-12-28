@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { logger } from "logger";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
-import { logger } from "../../../../../logger";
-import { payments } from "./payments-config";
 import { v4 as uuidv4 } from "uuid";
+
+import { payments } from "./payments-config";
 
 const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 
@@ -42,4 +43,4 @@ export const paymentQueryHandler = async ({ bot, query }: PaymentQueryParams) =>
 		});
 		await bot.answerCallbackQuery(queryId);
 	}
-}; 
+};

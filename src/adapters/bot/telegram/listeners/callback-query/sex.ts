@@ -1,6 +1,7 @@
+import { logger } from "logger";
 import TelegramBot, { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api";
-import { Cache, Sex } from "../../../../../types";
-import { logger } from "../../../../../logger";
+import { Cache, Sex } from "types";
+
 import { payments } from "./payments-config";
 
 type PaymentsConfig = {
@@ -58,4 +59,4 @@ export const sexQueryHandler = async ({ bot, query, cache }: SexQueryParams) => 
 		});
 		await bot.answerCallbackQuery(queryId);
 	}
-}; 
+};

@@ -1,5 +1,6 @@
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
-import { Cache } from "../../../../../types";
+import { Cache } from "types";
+
 import { paymentQueryHandler } from "./payment";
 import { sexQueryHandler } from "./sex";
 

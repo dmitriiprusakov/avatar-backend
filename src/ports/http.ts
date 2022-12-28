@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { logger } from "../logger";
+import { logger } from "logger";
 import TelegramBot, { InputMedia } from "node-telegram-bot-api";
 
 type PromptCallbackPayload = {

@@ -5,14 +5,18 @@
     },
     "extends": [
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
     ],
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "simple-import-sort",
+        "import"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": "tsconfig.json",
+        "project": "./tsconfig.json",
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
@@ -37,7 +41,7 @@
             },
             "typescript": {
                 "alwaysTryTypes": true,
-                "project": "tsconfig.json"
+                "project": "./tsconfig.json"
             }
         }
     },
@@ -78,6 +82,10 @@
         "object-curly-spacing": [
             "error",
             "always"
-        ]
+        ],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "import/first": "error",
+        "import/newline-after-import": "error"
     }
 }

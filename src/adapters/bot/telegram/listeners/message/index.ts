@@ -1,12 +1,12 @@
+import { FirestoreRepository } from "adapters/repository";
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
+import { Cache, MessagesCache } from "types";
 
-import { logger } from "../../../../../logger";
-import { FirestoreRepository } from "../../../../repository";
-import { Cache, MessagesCache } from "../../../../../types";
-import { startHandler } from "./start";
-import { helpHandler } from "./help";
 import { clearHandler } from "./clear";
 import { drawHandler } from "./draw";
+import { helpHandler } from "./help";
+import { startHandler } from "./start";
 
 interface MessageListener {
 	bot: TelegramBot,

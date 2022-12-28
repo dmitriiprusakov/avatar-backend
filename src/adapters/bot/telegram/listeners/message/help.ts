@@ -1,6 +1,6 @@
 import { t } from "i18next";
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import { logger } from "../../../../../logger";
 
 interface HelpParams {
 	bot: TelegramBot,
@@ -23,4 +23,4 @@ export const helpHandler = async ({ bot, message }: HelpParams) => {
 			message: `Error, C /help from ${id} ${username}, ${error}`,
 		});
 	}
-}; 
+};

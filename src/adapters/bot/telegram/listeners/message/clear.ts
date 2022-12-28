@@ -1,6 +1,6 @@
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import { Cache } from "../../../../../types";
-import { logger } from "../../../../../logger";
+import { Cache } from "types";
 
 interface ClearParams {
 	bot: TelegramBot,
@@ -27,4 +27,4 @@ export const clearHandler = async ({ bot, message, cache }: ClearParams) => {
 			message: `Error, C /clear from ${id} ${username}, ${error}`,
 		});
 	}
-}; 
+};

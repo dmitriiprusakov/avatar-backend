@@ -1,7 +1,7 @@
-import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
-import { logger } from "../../../../../logger";
+import { FirestoreRepository } from "adapters/repository";
 import { t } from "i18next";
-import { FirestoreRepository } from "../../../../repository";
+import { logger } from "logger";
+import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
 
 const startMediaGroup = [
 	"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
@@ -37,4 +37,4 @@ export const startHandler = async ({ bot, repository, message }: StartParams) =>
 			message: `Error, C /start from ${id} ${username}, ${error}`,
 		});
 	}
-}; 
+};

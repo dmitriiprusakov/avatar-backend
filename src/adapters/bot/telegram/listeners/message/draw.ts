@@ -1,6 +1,6 @@
+import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import { Cache } from "../../../../../types";
-import { logger } from "../../../../../logger";
+import { Cache } from "types";
 
 interface DrawParams {
 	bot: TelegramBot,
@@ -47,4 +47,4 @@ export const drawHandler = async ({ bot, message, cache }: DrawParams) => {
 			message: `Error, C /draw from ${id} ${username}, ${error}`,
 		});
 	}
-}; 
+};

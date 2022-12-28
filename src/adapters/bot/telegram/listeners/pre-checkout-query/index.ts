@@ -1,6 +1,5 @@
+import { logger } from "logger";
 import TelegramBot, { PreCheckoutQuery } from "node-telegram-bot-api";
-
-import { logger } from "../../../../../logger";
 
 interface PreCheckoutQueryListener {
 	bot: TelegramBot,
