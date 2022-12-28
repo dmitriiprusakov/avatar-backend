@@ -1,14 +1,16 @@
+import { t } from "i18next";
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import { Cache } from "types";
+import { Cache, MessagesCache } from "types";
 import { Logger } from "winston";
 
 interface DrawParams {
 	bot: TelegramBot,
 	message: Message,
 	cache: Cache,
+	messagesCache: MessagesCache,
 	logger: Logger,
 }
-export const drawHandler = async ({ bot, message, cache, logger }: DrawParams) => {
+export const drawHandler = async ({ bot, message, cache, messagesCache, logger }: DrawParams) => {
 	const { from } = message;
 	const { id, username = "anonymous" } = from;
 
@@ -21,20 +23,23 @@ export const drawHandler = async ({ bot, message, cache, logger }: DrawParams) =
 			return;
 		}
 
-		if (!cache[id].sex) {
-			await bot.sendMessage(
-				id,
-				"Кто на выбранных фотографиях?",
-				{
-					reply_markup: {
-						inline_keyboard: [
-							[{ text: "Женщина", callback_data: "sex/woman" }],
-							[{ text: "Мужчина", callback_data: "sex/man" }],
-						],
-					},
-				}
-			);
-		}
+		const { message_id } = await bot.sendMessage(
+			id,
+			"Кто на выбранных фотографиях?",
+			{
+				reply_markup: {
+					inline_keyboard: [
+						[{ text: t("sex.female", { lng: "ru" }), callback_data: "sex/female" }],
+						[{ text: t("sex.male", { lng: "ru" }), callback_data: "sex/male" }],
+					],
+				},
+			}
+		);
+
+		messagesCache[id] = Object.assign(
+			messagesCache[id] || {},
+			{ chooseSexMessageId: message_id }
+		);
 
 		logger.log({
 			level: "info",

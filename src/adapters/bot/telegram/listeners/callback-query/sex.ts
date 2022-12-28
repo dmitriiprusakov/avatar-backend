@@ -1,5 +1,6 @@
+import { t } from "i18next";
 import TelegramBot, { CallbackQuery, InlineKeyboardButton } from "node-telegram-bot-api";
-import { Cache, Sex } from "types";
+import { Cache, MessagesCache, Sex } from "types";
 import { Logger } from "winston";
 
 import { payments } from "./payments-config";
@@ -28,17 +29,33 @@ interface SexQueryParams {
 	bot: TelegramBot,
 	query: CallbackQuery,
 	cache: Cache,
+	messagesCache: MessagesCache,
 	logger: Logger;
 }
-export const sexQueryHandler = async ({ bot, query, cache, logger }: SexQueryParams) => {
+export const sexQueryHandler = async ({ bot, query, cache, messagesCache, logger }: SexQueryParams) => {
 	const { id: queryId, from, data } = query;
 	const { id, username = "anonymous" } = from;
 
 	const [queryType, queryValue] = data.split("/");
 
 	try {
-		if (!cache[id].sex) {
-			await bot.sendMessage(
+		cache[id] = Object.assign(cache[id] || {}, { sex: queryValue as Sex });
+
+		if (messagesCache[id]?.chooseSexMessageId) {
+			await bot.editMessageText(
+				`Кто на выбранных фотографиях?\n➪ _*${t(`sex.${queryValue}`, { lng: "ru" })}*_`,
+				{
+					chat_id: id,
+					message_id: messagesCache[id].chooseSexMessageId,
+					parse_mode: "MarkdownV2",
+				}
+			);
+			delete messagesCache[id].chooseSexMessageId;
+			await bot.answerCallbackQuery(queryId);
+		}
+
+		setTimeout(async () => {
+			const { message_id } = await bot.sendMessage(
 				id,
 				"Сколько аватарок рисуем?",
 				{
@@ -47,11 +64,14 @@ export const sexQueryHandler = async ({ bot, query, cache, logger }: SexQueryPar
 					},
 				}
 			);
-		}
 
-		cache[id] = Object.assign(cache[id], { sex: queryValue as Sex });
+			messagesCache[id] = Object.assign(
+				messagesCache[id] || {},
+				{ choosePayOptionMessageId: message_id }
+			);
 
-		await bot.answerCallbackQuery(queryId);
+		}, 600);
+
 		return;
 	} catch (error) {
 		logger.log({

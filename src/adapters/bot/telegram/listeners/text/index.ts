@@ -16,7 +16,7 @@ interface TextListener {
 	repository: FirestoreRepository,
 	logger: Logger,
 }
-const textListener = async ({ bot, message, cache, repository, logger }: TextListener) => {
+const textListener = async ({ bot, message, cache, messagesCache, repository, logger }: TextListener) => {
 	const { text, from } = message;
 	const { is_bot, id, username = "anonymous" } = from;
 
@@ -29,7 +29,7 @@ const textListener = async ({ bot, message, cache, repository, logger }: TextLis
 
 		if (text === "/clear") return clearHandler({ bot, message, cache, logger });
 
-		if (text === "/draw") return drawHandler({ bot, message, cache, logger });
+		if (text === "/draw") return drawHandler({ bot, message, cache, messagesCache, logger });
 
 		await bot.sendMessage(id, "Не совсем понял, что вы имеете ввиду!");
 	} catch (error) {

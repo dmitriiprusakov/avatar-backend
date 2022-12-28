@@ -26,7 +26,7 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals, logge
 	);
 	bot.on(
 		"callback_query",
-		(query) => callbackQueryListener({ bot, query, cache, logger })
+		(query) => callbackQueryListener({ bot, query, cache, messagesCache, logger })
 	);
 	bot.on(
 		"pre_checkout_query",
@@ -38,7 +38,7 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals, logge
 	);
 	bot.on(
 		"photo",
-		(message) => photoListener({ bot, cache, message, logger })
+		(message) => photoListener({ bot, cache, messagesCache, message, logger })
 	);
 	bot.on(
 		"document",

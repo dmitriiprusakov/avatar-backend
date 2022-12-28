@@ -1,6 +1,6 @@
-export type Sex = "man" | "woman";
+export type Sex = "male" | "female";
 
-export type Id = number;
+export type TelegramId = number;
 
 export type UserData = {
 	sex?: Sex,
@@ -8,9 +8,15 @@ export type UserData = {
 	links?: string[],
 }
 
-export type Cache = Record<Id, UserData>
+export type Cache = Record<TelegramId, UserData>
 
-export type MessagesCache = Record<Id, any>
+export type UserMessagesCache = {
+	imagesCountMessageId?: TelegramId[];
+	choosePayOptionMessageId?: TelegramId;
+	chooseSexMessageId?: TelegramId;
+}
+
+export type MessagesCache = Record<TelegramId, UserMessagesCache>
 
 export type Payment = {
 	text: string;
