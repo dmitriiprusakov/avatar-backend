@@ -69,10 +69,7 @@ export const sexQueryHandler = async ({ bot, query, cache, messagesCache, logger
 				messagesCache[id] || {},
 				{ choosePayOptionMessageId: message_id }
 			);
-
-		}, 600);
-
-		return;
+		}, 300);
 	} catch (error) {
 		logger.log({
 			level: "error",

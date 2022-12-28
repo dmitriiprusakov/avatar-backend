@@ -29,9 +29,9 @@ const documentListener = async ({ bot, cache, message, logger }: DocumentListene
 		const documentLink = await bot.getFileLink(document.file_id);
 
 		if (!cache[id] || cache[id].links.length < MAX_IMAGES_COUNT) {
-			cache[id] = {
+			cache[id] = Object.assign(cache[id] || {}, {
 				links: (cache[id]?.links || []).concat([documentLink]),
-			};
+			});
 		}
 
 		if (cache[id].links.length < MIN_IMAGES_COUNT) {

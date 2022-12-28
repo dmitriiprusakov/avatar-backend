@@ -6,6 +6,7 @@ export type UserData = {
 	sex?: Sex,
 	payment?: number,
 	links?: string[],
+	free?: true
 }
 
 export type Cache = Record<TelegramId, UserData>

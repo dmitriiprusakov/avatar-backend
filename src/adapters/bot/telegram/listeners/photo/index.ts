@@ -12,7 +12,7 @@ interface PhotoListener {
 	message: Message,
 	logger: Logger;
 }
-const photoListener = async ({ bot, cache, messagesCache, message, logger }: PhotoListener) => {
+const photoListener = async ({ bot, cache, message, logger }: PhotoListener) => {
 	const { from, photo } = message;
 	const { id, is_bot, username = "anonymous" } = from;
 
@@ -23,10 +23,10 @@ const photoListener = async ({ bot, cache, messagesCache, message, logger }: Pho
 
 		const photoLink = await bot.getFileLink(maxSizeFile.file_id);
 
-		if (!cache[id] || cache[id].links.length < MAX_IMAGES_COUNT) {
-			cache[id] = {
+		if (!cache[id]?.links || cache[id].links.length < MAX_IMAGES_COUNT) {
+			cache[id] = Object.assign(cache[id] || {}, {
 				links: (cache[id]?.links || []).concat([photoLink]),
-			};
+			});
 		}
 
 		if (cache[id].links.length < MIN_IMAGES_COUNT) {

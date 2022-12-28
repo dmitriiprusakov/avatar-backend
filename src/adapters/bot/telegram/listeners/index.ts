@@ -26,7 +26,7 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals, logge
 	);
 	bot.on(
 		"callback_query",
-		(query) => callbackQueryListener({ bot, query, cache, messagesCache, logger })
+		(query) => callbackQueryListener({ bot, query, cache, messagesCache, logger, externals })
 	);
 	bot.on(
 		"pre_checkout_query",

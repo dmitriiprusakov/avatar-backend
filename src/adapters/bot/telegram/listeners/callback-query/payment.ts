@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { ExternalServices } from "adapters/externals";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
-import { MessagesCache } from "types";
+import { Cache, MessagesCache } from "types";
 import { v4 as uuidv4 } from "uuid";
 import { Logger } from "winston";
 
@@ -11,10 +12,12 @@ const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 interface PaymentQueryParams {
 	bot: TelegramBot,
 	query: CallbackQuery,
+	cache: Cache;
 	messagesCache: MessagesCache,
 	logger: Logger,
+	externals: ExternalServices
 }
-export const paymentQueryHandler = async ({ bot, query, messagesCache, logger }: PaymentQueryParams) => {
+export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, logger, externals }: PaymentQueryParams) => {
 	const { id: queryId, from, data } = query;
 	const { id, username = "anonymous" } = from;
 
@@ -36,6 +39,24 @@ export const paymentQueryHandler = async ({ bot, query, messagesCache, logger }:
 			await bot.answerCallbackQuery(queryId);
 		}
 
+		const isFree = cache[id]?.free;
+
+		if (isFree) {
+			await externals.astria.createTune({
+				chatId: id,
+				image_urls: cache[id].links,
+				name: cache[id].sex,
+				username,
+				promptsAmount: selectedPayment.payload,
+				logger,
+			});
+
+			await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
+			delete cache[id];
+
+			return;
+		}
+
 		setTimeout(async () => {
 			// FIXME: перед высылкой инвойса нужно чекнуть, что все данные есть, пол, фотки
 			await bot.sendInvoice(
@@ -51,7 +72,7 @@ export const paymentQueryHandler = async ({ bot, query, messagesCache, logger }:
 					start_parameter: uuidv4(),
 				}
 			);
-		}, 600);
+		}, 300);
 	} catch (error) {
 		logger.log({
 			level: "error",

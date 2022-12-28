@@ -1,3 +1,4 @@
+import { ExternalServices } from "adapters/externals";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
 import { Cache, MessagesCache } from "types";
 import { Logger } from "winston";
@@ -9,10 +10,11 @@ type CallbackQueryListener = {
 	bot: TelegramBot;
 	query: CallbackQuery;
 	cache: Cache;
-	messagesCache: MessagesCache,
+	messagesCache: MessagesCache;
 	logger: Logger;
+	externals: ExternalServices
 }
-const callbackQueryListener = async ({ bot, query, cache, messagesCache, logger }: CallbackQueryListener) => {
+const callbackQueryListener = async ({ bot, query, cache, messagesCache, logger, externals }: CallbackQueryListener) => {
 	const { from, data } = query;
 
 	if (from.is_bot) return;
@@ -21,7 +23,7 @@ const callbackQueryListener = async ({ bot, query, cache, messagesCache, logger 
 
 	if (queryType === "sex") return sexQueryHandler({ bot, query, cache, messagesCache, logger });
 
-	if (queryType === "payment") return paymentQueryHandler({ bot, query, messagesCache, logger });
+	if (queryType === "payment") return paymentQueryHandler({ bot, query, cache, messagesCache, logger, externals });
 };
 
 export { callbackQueryListener };

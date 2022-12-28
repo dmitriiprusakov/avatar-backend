@@ -4,6 +4,10 @@ export interface AddUserParams {
 	language_code?: string;
 }
 
+export interface CheckSecretParams {
+	code: string;
+}
+
 export interface UpdateUserLastImagesParams {
 	id: number | string;
 	imageUrl: string;
