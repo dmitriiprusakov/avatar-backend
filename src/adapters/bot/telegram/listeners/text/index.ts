@@ -8,14 +8,14 @@ import { drawHandler } from "./draw";
 import { helpHandler } from "./help";
 import { startHandler } from "./start";
 
-interface MessageListener {
+interface TextListener {
 	bot: TelegramBot,
 	message: Message,
 	cache: Cache,
 	messagesCache: MessagesCache,
 	repository: FirestoreRepository,
 }
-const messageListener = async ({ bot, message, cache, repository }: MessageListener) => {
+const textListener = async ({ bot, message, cache, repository }: TextListener) => {
 	const { text, from } = message;
 	const { is_bot, id, username = "anonymous" } = from;
 
@@ -39,4 +39,4 @@ const messageListener = async ({ bot, message, cache, repository }: MessageListe
 	}
 };
 
-export { messageListener };
+export { textListener };

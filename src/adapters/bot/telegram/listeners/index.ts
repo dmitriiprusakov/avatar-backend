@@ -5,10 +5,10 @@ import { Cache, MessagesCache } from "types";
 
 import { callbackQueryListener } from "./callback-query";
 import { documentListener } from "./document";
-import { messageListener } from "./message";
 import { photoListener } from "./photo";
 import { preCheckoutQueryListener } from "./pre-checkout-query";
 import { successfulPaymentListener } from "./successful-payment";
+import { textListener } from "./text";
 
 interface InitListeners {
 	bot: TelegramBot,
@@ -20,7 +20,7 @@ interface InitListeners {
 const initListeners = ({ bot, cache, messagesCache, repository, externals }: InitListeners) => {
 	bot.on(
 		"text",
-		(message) => messageListener({ bot, message, cache, messagesCache, repository })
+		(message) => textListener({ bot, message, cache, messagesCache, repository })
 	);
 	bot.on(
 		"callback_query",
