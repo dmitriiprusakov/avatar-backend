@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Logger } from "winston";
 
 import { createTune } from "./create-tune";
 import { Astria } from "./types";

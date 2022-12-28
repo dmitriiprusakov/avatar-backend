@@ -1,7 +1,7 @@
 import { FirestoreRepository } from "adapters/repository";
 import { t } from "i18next";
-import { logger } from "logger";
 import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
+import { Logger } from "winston";
 
 const startMediaGroup = [
 	"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
@@ -17,8 +17,9 @@ interface StartParams {
 	bot: TelegramBot,
 	message: Message,
 	repository: FirestoreRepository,
+	logger: Logger,
 }
-export const startHandler = async ({ bot, repository, message }: StartParams) => {
+export const startHandler = async ({ bot, repository, message, logger }: StartParams) => {
 	const { from } = message;
 	const { id, username = "anonymous", language_code } = from;
 

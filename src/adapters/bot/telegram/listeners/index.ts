@@ -2,6 +2,7 @@ import { ExternalServices } from "adapters/externals";
 import { FirestoreRepository } from "adapters/repository";
 import TelegramBot from "node-telegram-bot-api";
 import { Cache, MessagesCache } from "types";
+import { Logger } from "winston";
 
 import { callbackQueryListener } from "./callback-query";
 import { documentListener } from "./document";
@@ -15,32 +16,33 @@ interface InitListeners {
 	cache: Cache,
 	messagesCache: MessagesCache,
 	repository: FirestoreRepository,
-	externals?: ExternalServices
+	logger: Logger,
+	externals: ExternalServices
 }
-const initListeners = ({ bot, cache, messagesCache, repository, externals }: InitListeners) => {
+const initListeners = ({ bot, cache, messagesCache, repository, externals, logger }: InitListeners) => {
 	bot.on(
 		"text",
-		(message) => textListener({ bot, message, cache, messagesCache, repository })
+		(message) => textListener({ bot, message, cache, messagesCache, repository, logger })
 	);
 	bot.on(
 		"callback_query",
-		(query) => callbackQueryListener({ bot, query, cache })
+		(query) => callbackQueryListener({ bot, query, cache, logger })
 	);
 	bot.on(
 		"pre_checkout_query",
-		(query) => preCheckoutQueryListener({ bot, query })
+		(query) => preCheckoutQueryListener({ bot, query, logger })
 	);
 	bot.on(
 		"successful_payment",
-		(message) => successfulPaymentListener({ bot, message, cache, externals })
+		(message) => successfulPaymentListener({ bot, message, cache, externals, logger })
 	);
 	bot.on(
 		"photo",
-		(message) => photoListener({ bot, cache, message })
+		(message) => photoListener({ bot, cache, message, logger })
 	);
 	bot.on(
 		"document",
-		(message) => documentListener({ bot, cache, message })
+		(message) => documentListener({ bot, cache, message, logger })
 	);
 };
 

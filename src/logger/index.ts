@@ -26,6 +26,4 @@ const initLogger = () => {
 	return logger;
 };
 
-export const logger = initLogger();
-
 export default initLogger;

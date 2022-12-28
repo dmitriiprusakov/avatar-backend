@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { logger } from "logger";
+// import { logger } from "logger";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
 import { v4 as uuidv4 } from "uuid";
+import { Logger } from "winston";
 
 import { payments } from "./payments-config";
 
@@ -10,8 +11,9 @@ const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
 interface PaymentQueryParams {
 	bot: TelegramBot,
 	query: CallbackQuery,
+	logger: Logger,
 }
-export const paymentQueryHandler = async ({ bot, query }: PaymentQueryParams) => {
+export const paymentQueryHandler = async ({ bot, query, logger }: PaymentQueryParams) => {
 	const { id: queryId, from, data } = query;
 	const { id, username = "anonymous" } = from;
 
@@ -20,7 +22,9 @@ export const paymentQueryHandler = async ({ bot, query }: PaymentQueryParams) =>
 	// FIXME: перед высылкой инвойса нужно чекнуть, что все данные есть, пол, фотки
 	try {
 		const selectedPayment = payments[queryValue];
-		// @ts-ignore
+
+		console.log(selectedPayment);
+
 		await bot.sendInvoice(
 			id,
 			selectedPayment.title,

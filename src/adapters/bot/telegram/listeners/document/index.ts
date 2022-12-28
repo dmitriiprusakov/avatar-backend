@@ -1,6 +1,6 @@
-import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
+import { Logger } from "winston";
 
 const MIN_IMAGES_COUNT = 5;
 const MAX_IMAGES_COUNT = 15;
@@ -9,8 +9,9 @@ interface DocumentListener {
 	bot: TelegramBot,
 	cache: Cache,
 	message: Message,
+	logger: Logger
 }
-const documentListener = async ({ bot, cache, message }: DocumentListener) => {
+const documentListener = async ({ bot, cache, message, logger }: DocumentListener) => {
 	const { from, document } = message;
 	const { id, is_bot, username = "anonymous" } = from;
 

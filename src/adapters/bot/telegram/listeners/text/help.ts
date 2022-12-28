@@ -1,12 +1,13 @@
 import { t } from "i18next";
-import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
+import { Logger } from "winston";
 
 interface HelpParams {
 	bot: TelegramBot,
 	message: Message,
+	logger: Logger,
 }
-export const helpHandler = async ({ bot, message }: HelpParams) => {
+export const helpHandler = async ({ bot, message, logger }: HelpParams) => {
 	const { from } = message;
 	const { id, username = "anonymous" } = from;
 

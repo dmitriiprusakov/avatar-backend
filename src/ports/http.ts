@@ -1,6 +1,6 @@
 import { Application } from "express";
-import { logger } from "logger";
 import TelegramBot, { InputMedia } from "node-telegram-bot-api";
+import { Logger } from "winston";
 
 type PromptCallbackPayload = {
 	id: number,
@@ -15,7 +15,12 @@ type PromptCallbackPayload = {
 	images: string[]
 }
 
-const initRoutes = (app: Application, bot: TelegramBot) => {
+interface InitRoutes {
+	app: Application,
+	bot: TelegramBot,
+	logger: Logger,
+}
+const initRoutes = ({ app, bot, logger }: InitRoutes) => {
 	app.post("/finetune", async (req, res) => {
 		try {
 			const { i: chatId } = req.query;

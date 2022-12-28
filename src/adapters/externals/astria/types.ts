@@ -1,4 +1,5 @@
 import { Sex } from "types";
+import { Logger } from "winston";
 
 export interface Astria {
     createTune: ({ chatId, username, name, image_urls, promptsAmount }: CreateTuneparams) => Promise<any>
@@ -9,7 +10,8 @@ export interface CreateTuneparams {
     username: string
     name: Sex,
     image_urls: string[],
-    promptsAmount: string
+    promptsAmount: string,
+    logger: Logger
 }
 
 export type Prompt = {

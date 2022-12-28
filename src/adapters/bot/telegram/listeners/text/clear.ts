@@ -1,13 +1,14 @@
-import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
+import { Logger } from "winston";
 
 interface ClearParams {
 	bot: TelegramBot,
 	message: Message,
 	cache: Cache,
+	logger: Logger,
 }
-export const clearHandler = async ({ bot, message, cache }: ClearParams) => {
+export const clearHandler = async ({ bot, message, cache, logger }: ClearParams) => {
 	const { from } = message;
 	const { id, username = "anonymous" } = from;
 

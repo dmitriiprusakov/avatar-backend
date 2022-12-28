@@ -1,11 +1,12 @@
-import { logger } from "logger";
 import TelegramBot, { PreCheckoutQuery } from "node-telegram-bot-api";
+import { Logger } from "winston";
 
 interface PreCheckoutQueryListener {
 	bot: TelegramBot,
 	query: PreCheckoutQuery,
+	logger: Logger,
 }
-const preCheckoutQueryListener = async ({ bot, query }: PreCheckoutQueryListener) => {
+const preCheckoutQueryListener = async ({ bot, query, logger }: PreCheckoutQueryListener) => {
 	try {
 		const { id: queryId, from } = query;
 		const { id, is_bot, username = "anonymous" } = from;

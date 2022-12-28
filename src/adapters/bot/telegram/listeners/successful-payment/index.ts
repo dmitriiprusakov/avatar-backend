@@ -1,16 +1,17 @@
 import { ExternalServices } from "adapters/externals";
-import { logger } from "logger";
 import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
+import { Logger } from "winston";
 
 interface SuccessfulPaymentListener {
 	bot: TelegramBot,
 	message: Message,
 	cache: Cache,
-	externals: ExternalServices
+	externals: ExternalServices,
+	logger: Logger;
 }
 
-const successfulPaymentListener = async ({ bot, message, cache, externals }: SuccessfulPaymentListener) => {
+const successfulPaymentListener = async ({ bot, message, cache, externals, logger }: SuccessfulPaymentListener) => {
 	try {
 		const { from, successful_payment } = message;
 		const { is_bot, id, username = "anonymous" } = from;
@@ -30,6 +31,7 @@ const successfulPaymentListener = async ({ bot, message, cache, externals }: Suc
 					name: cache[id].sex,
 					username,
 					promptsAmount: successful_payment.invoice_payload,
+					logger,
 				});
 
 				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
