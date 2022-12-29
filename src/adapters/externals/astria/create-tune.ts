@@ -6,8 +6,8 @@ import { axiosAstria } from ".";
 import { CreateTuneparams, Tune } from "./types";
 
 const getPromptsForName = (name: Sex) => {
-	if (name === "female") return woman_prompts;
-	if (name === "male") return man_prompts;
+	if (name === "woman") return woman_prompts;
+	if (name === "man") return man_prompts;
 	return [];
 };
 

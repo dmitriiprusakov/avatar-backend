@@ -29,8 +29,8 @@ export const drawHandler = async ({ bot, message, cache, messagesCache, logger }
 			{
 				reply_markup: {
 					inline_keyboard: [
-						[{ text: t("sex.female", { lng: "ru" }), callback_data: "sex/female" }],
-						[{ text: t("sex.male", { lng: "ru" }), callback_data: "sex/male" }],
+						[{ text: t("sex.woman", { lng: "ru" }), callback_data: "sex/woman" }],
+						[{ text: t("sex.man", { lng: "ru" }), callback_data: "sex/man" }],
 					],
 				},
 			}

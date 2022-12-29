@@ -1,4 +1,4 @@
-export type Sex = "male" | "female";
+export type Sex = "man" | "woman";
 
 export type TelegramId = number;
 
