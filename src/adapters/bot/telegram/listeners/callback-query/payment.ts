@@ -63,24 +63,21 @@ export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, lo
 		}
 
 		if (cache[id]?.links?.length && cache[id]?.sex) {
-			setTimeout(async () => {
-				// FIXME: перед высылкой инвойса нужно чекнуть, что все данные есть, пол, фотки
-				await bot.sendInvoice(
-					id,
-					selectedPayment.title,
-					selectedPayment.description,
-					selectedPayment.payload,
-					YOOMONEY_TOKEN,
-					"RUB",
-					// @ts-ignore
-					selectedPayment.prices,
-					{
-						start_parameter: uuidv4(),
-						max_tip_amount: 10000,
-						suggested_tip_amounts: JSON.stringify([1200, 2500, 5000]),
-					}
-				);
-			}, 300);
+			await bot.sendInvoice(
+				id,
+				selectedPayment.title,
+				selectedPayment.description,
+				selectedPayment.payload,
+				YOOMONEY_TOKEN,
+				"RUB",
+				// @ts-ignore
+				selectedPayment.prices,
+				{
+					start_parameter: uuidv4(),
+					max_tip_amount: 10000,
+					suggested_tip_amounts: JSON.stringify([1200, 2500, 5000]),
+				}
+			);
 		} else {
 			delete cache[id];
 			await bot.sendMessage(id, "😿 Что-то пошло не так, пожалуйста, используйте команду /clear и повторите попытку!");

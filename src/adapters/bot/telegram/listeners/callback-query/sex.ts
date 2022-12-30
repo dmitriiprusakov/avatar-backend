@@ -51,23 +51,21 @@ export const sexQueryHandler = async ({ bot, query, cache, messagesCache, logger
 			await bot.answerCallbackQuery(queryId);
 		}
 
-		setTimeout(async () => {
-			const { message_id } = await bot.sendMessage(
-				id,
-				"Сколько аватарок рисуем? Скидки от 20 до 30% 🎁",
-				{
-					reply_markup: {
-						inline_keyboard: paymentsConfig.inline_keyboard,
-					},
-					parse_mode: "MarkdownV2",
-				}
-			);
+		const { message_id } = await bot.sendMessage(
+			id,
+			"Сколько аватарок рисуем? Скидки от 20 до 30% 🎁",
+			{
+				reply_markup: {
+					inline_keyboard: paymentsConfig.inline_keyboard,
+				},
+				parse_mode: "MarkdownV2",
+			}
+		);
 
-			messagesCache[id] = Object.assign(
-				messagesCache[id] || {},
-				{ choosePayOptionMessageId: message_id }
-			);
-		}, 300);
+		messagesCache[id] = Object.assign(
+			messagesCache[id] || {},
+			{ choosePayOptionMessageId: message_id }
+		);
 	} catch (error) {
 		logger.log({
 			level: "error",

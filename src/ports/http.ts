@@ -53,9 +53,7 @@ const initRoutes = ({ app, bot, logger }: InitRoutes) => {
 				caption: index === 0 ? "Один из стилей ⬆️" : undefined,
 			}));
 
-			setTimeout(async () => {
-				await bot.sendMediaGroup(chatId as string, media);
-			}, 5000);
+			await bot.sendMediaGroup(chatId as string, media);
 
 			res.send("OK, Thanks for prompts, Astria! See ya!");
 
