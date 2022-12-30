@@ -7,13 +7,13 @@ import { CreateTuneparams, Tune } from "./types";
 
 const newYearManPrompts = [
 	{
-		"text": "sks man as Marv Murchins from film Home Alone, wet bandits, frame from film, close up, portrait",
+		"text": "sks handsome man as The King of the North, digital art, ultradetailed, close up, portrait, artstation",
 	},
 	{
-		"text": "sks man as Kevin McCallister character from film Home Alone, main poster of Home Alone, frame from film, film poster",
+		"text": "sks amazing beautiful man in snowfall, expressive eyes, digital art, ultradetailed, close up, portrait, artstation",
 	},
 	{
-		"text": "sks man on main poster from film Home Alone, wet bandits, frame from film, film poster",
+		"text": "sks brutal handsome man from north, viking, in snowfall, portrait",
 	},
 	{
 		"text": "sks man in santa hat and red sweater, close up, portrait",
