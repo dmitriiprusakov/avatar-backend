@@ -34,7 +34,7 @@ const successfulPaymentListener = async ({ bot, message, cache, externals, logge
 					logger,
 				});
 
-				await bot.sendMessage(id, "Фото отправлены на обработку, примерное время ожидания 1 час!");
+				await bot.sendMessage(id, "✨ Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete cache[id];
 
 				return;

@@ -30,7 +30,7 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals, logge
 	);
 	bot.on(
 		"pre_checkout_query",
-		(query) => preCheckoutQueryListener({ bot, query, logger })
+		(query) => preCheckoutQueryListener({ bot, query, cache, logger })
 	);
 	bot.on(
 		"successful_payment",

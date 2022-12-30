@@ -33,7 +33,7 @@ export const secretHandler = async ({ bot, message, cache, logger, repository }:
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, C /clear from ${id} ${username}, ${error}`,
+			message: `Error, Secret from ${id} ${username}, ${error}`,
 		});
 	}
 };

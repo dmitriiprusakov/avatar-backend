@@ -6,7 +6,6 @@ import { Logger } from "winston";
 import { payments } from "./payments-config";
 
 type PaymentsConfig = {
-	callback_data_ids: string[];
 	inline_keyboard: InlineKeyboardButton[][];
 }
 
@@ -14,14 +13,12 @@ const paymentsConfig = Object.keys(payments)
 	.reduce<PaymentsConfig>((acc, paymentId) => {
 		const payment = payments[paymentId];
 		return {
-			callback_data_ids: acc.callback_data_ids.concat([paymentId]),
 			inline_keyboard: acc.inline_keyboard.concat([[{
 				text: payment.text,
 				callback_data: `payment/${paymentId}`,
 			}]]),
 		};
 	}, {
-		callback_data_ids: [],
 		inline_keyboard: [],
 	});
 
@@ -57,11 +54,12 @@ export const sexQueryHandler = async ({ bot, query, cache, messagesCache, logger
 		setTimeout(async () => {
 			const { message_id } = await bot.sendMessage(
 				id,
-				"Сколько аватарок рисуем?",
+				"Сколько аватарок рисуем? Скидки от 20 до 30% 🎁",
 				{
 					reply_markup: {
 						inline_keyboard: paymentsConfig.inline_keyboard,
 					},
+					parse_mode: "MarkdownV2",
 				}
 			);
 
