@@ -40,12 +40,13 @@ const initRoutes = ({ app, bot, logger }: InitRoutes) => {
 	});
 
 	app.post("/prompt", async (req, res) => {
-		try {
-			const { i: chatId } = req.query;
-			if (!chatId) return res.send("No expected url params provided!");
+		const { i: chatId } = req.query;
+		if (!chatId) return res.send("No expected url params provided!");
 
-			const prompt: PromptCallbackPayload = req.body.prompt;
-			const { images } = prompt;
+		const prompt: PromptCallbackPayload = req.body.prompt;
+		const { images = [], id = 0, text = "" } = prompt;
+
+		try {
 
 			const media = images.map<InputMedia>((imageUrl, index) => ({
 				type: "photo",
@@ -61,7 +62,7 @@ const initRoutes = ({ app, bot, logger }: InitRoutes) => {
 		} catch (error) {
 			logger.log({
 				level: "error",
-				message: `Error, finishing P, ${error}`,
+				message: `Error, finishing P, ${error}, P_id ${id},  P_text ${text}`,
 			});
 		}
 	});
