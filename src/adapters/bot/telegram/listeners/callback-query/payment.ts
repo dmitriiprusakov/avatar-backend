@@ -42,17 +42,22 @@ export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, lo
 		const isFree = cache[id]?.free;
 
 		if (isFree) {
-			await externals.astria.createTune({
-				chatId: id,
-				image_urls: cache[id].links,
-				name: cache[id].sex,
-				username,
-				promptsAmount: selectedPayment.payload,
-				logger,
-			});
+			if (cache[id]?.links?.length && cache[id]?.sex) {
+				await externals.astria.createTune({
+					chatId: id,
+					image_urls: cache[id].links,
+					name: cache[id].sex,
+					username,
+					promptsAmount: selectedPayment.payload,
+					logger,
+				});
 
-			await bot.sendMessage(id, "✨ Фото отправлены на обработку, примерное время ожидания 1 час!");
-			delete cache[id];
+				await bot.sendMessage(id, "✨ Фото отправлены на обработку, примерное время ожидания 1 час!");
+				delete cache[id];
+			} else {
+				await bot.sendMessage(id, "😿 Что-то пошло не так, пожалуйста, используйте команду /clear и повторите попытку!");
+				delete cache[id];
+			}
 
 			return;
 		}
