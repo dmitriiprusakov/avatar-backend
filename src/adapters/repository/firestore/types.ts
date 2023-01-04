@@ -8,11 +8,11 @@ export interface CheckSecretParams {
 	code: string;
 }
 
-export interface UpdateUserLastImagesParams {
-	id: number | string;
-	imageUrl: string;
+export interface UpdateCampaignUsersAmountParams {
+	campaignId: string;
 }
 
-export interface AddImageToTuneParams {
-	imageUrl: string;
+export interface UpdateCampaignPaymentsAmountTotalParams {
+	campaignId: string;
+	payment: number;
 }

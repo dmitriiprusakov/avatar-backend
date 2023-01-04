@@ -33,7 +33,7 @@ async function main() {
 			message: `We are live on ${PORT}, IS_TESTING_BRANCH = ${!!IS_TESTING_BRANCH}`,
 		});
 
-		const repository = new FirestoreRepository();
+		const repository = new FirestoreRepository({ logger });
 
 		const externals = initExternalServices();
 

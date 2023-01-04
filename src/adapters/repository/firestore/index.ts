@@ -1,16 +1,23 @@
 import { cert, initializeApp, ServiceAccount } from "firebase-admin/app";
 import { FieldValue, Firestore, getFirestore } from "firebase-admin/firestore";
+import { Logger } from "winston";
 
 import serviceAccount from "../../../../service-account.json";
-import { AddUserParams, CheckSecretParams, UpdateUserLastImagesParams } from "./types";
+import { AddUserParams, CheckSecretParams, UpdateCampaignPaymentsAmountTotalParams, UpdateCampaignUsersAmountParams } from "./types";
+
+interface FirestoreRepositoryConstructor {
+	logger: Logger
+}
 
 class FirestoreRepository {
 	private readonly firestore: Firestore = null;
-	constructor() {
+	private readonly logger: Logger = null;
+
+	constructor({ logger }: FirestoreRepositoryConstructor) {
 		const app = initializeApp({
 			credential: cert(serviceAccount as ServiceAccount),
 		});
-
+		this.logger = logger;
 		this.firestore = getFirestore(app);
 	}
 
@@ -18,8 +25,8 @@ class FirestoreRepository {
 		return this.firestore.collection("users");
 	}
 
-	private tunes() {
-		return this.firestore.collection("tunes");
+	private campaigns() {
+		return this.firestore.collection("campaigns");
 	}
 
 	private secrets() {
@@ -27,33 +34,73 @@ class FirestoreRepository {
 	}
 
 	async AddUser({ id, username, language_code }: AddUserParams) {
-		const docRef = this.users().doc(`${id}`);
+		try {
+			const docRef = this.users().doc(`${id}`);
 
-		return await docRef.set({
-			alias: username,
-			lng: language_code,
-			lastMsgTs: FieldValue.serverTimestamp(),
-		}, { merge: true });
+			return await docRef.set({
+				alias: username,
+				lng: language_code,
+				lastMsgTs: FieldValue.serverTimestamp(),
+			}, { merge: true });
+		} catch (error) {
+			this.logger.log({
+				level: "info",
+				message: `Repo AddUser command failed, ${error}`,
+			});
+		}
 	}
 
 	async CheckSecret({ code }: CheckSecretParams) {
-		const snapshot = await this.secrets().where("code", "==", code).limit(1).get();
+		try {
+			const snapshot = await this.secrets().where("code", "==", code).limit(1).get();
 
-		if (snapshot.empty) return false;
+			if (snapshot.empty) return false;
 
-		snapshot.forEach(async doc => {
-			await this.secrets().doc(doc.id).delete();
-		});
+			snapshot.forEach(async doc => {
+				await this.secrets().doc(doc.id).delete();
+			});
 
-		return true;
+			return true;
+		} catch (error) {
+			this.logger.log({
+				level: "info",
+				message: `Repo CheckSecret command failed, ${error}`,
+			});
+		}
 	}
 
-	async UpdateUserLastImages({ id, imageUrl }: UpdateUserLastImagesParams) {
-		const docRef = this.users().doc(`${id}`);
+	UpdateCampaignUsersAmount({ campaignId }: UpdateCampaignUsersAmountParams) {
+		try {
+			console.log({ campaignId });
 
-		return await docRef.update({
-			last_images: FieldValue.arrayUnion(imageUrl),
-		});
+			const docRef = this.campaigns().doc(campaignId);
+
+			docRef.set({
+				usersAmount: FieldValue.increment(1),
+			}, { merge: true });
+			return;
+		} catch (error) {
+			this.logger.log({
+				level: "info",
+				message: `Repo UpdateCampaignUsersAmount command failed, ${error}`,
+			});
+		}
+	}
+
+	UpdateCampaignPaymentsAmountTotal({ campaignId, payment }: UpdateCampaignPaymentsAmountTotalParams) {
+		try {
+			console.log({ campaignId, payment });
+			const docRef = this.campaigns().doc(`${campaignId}`);
+
+			docRef.set({
+				paymentsAmountTotal: FieldValue.increment(payment),
+			}, { merge: true });
+		} catch (error) {
+			this.logger.log({
+				level: "info",
+				message: `Repo UpdateCampaignPaymentsAmountTotal command failed, ${error}`,
+			});
+		}
 	}
 }
 
