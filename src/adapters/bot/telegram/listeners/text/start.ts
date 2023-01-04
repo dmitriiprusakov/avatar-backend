@@ -1,6 +1,7 @@
 import { FirestoreRepository } from "adapters/repository";
 import { t } from "i18next";
 import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
+import { Cache } from "types";
 import { Logger } from "winston";
 
 const startMediaGroup = [
@@ -14,16 +15,31 @@ const startMediaGroup = [
 }));
 
 interface StartParams {
-	bot: TelegramBot,
-	message: Message,
-	repository: FirestoreRepository,
-	logger: Logger,
+	bot: TelegramBot;
+	message: Message;
+	cache: Cache;
+	repository: FirestoreRepository;
+	logger: Logger;
 }
-export const startHandler = async ({ bot, repository, message, logger }: StartParams) => {
-	const { from } = message;
+export const startHandler = async ({ bot, cache, repository, message, logger }: StartParams) => {
+	const { from, text } = message;
 	const { id, username = "anonymous", language_code } = from;
 
 	try {
+		const commandPayload = text?.replace("/start ", "");
+
+		if (commandPayload.length) {
+			const url = Buffer.from(commandPayload, "base64").toString();
+			const params = Object.fromEntries(new URLSearchParams(url).entries());
+
+			if (params?.f) {
+				cache[id] = Object.assign(cache[id] || {}, {
+					from: params?.f,
+				});
+				repository.UpdateCampaignUsersAmount({ campaignId: params?.f });
+			}
+		}
+
 		await bot.sendMediaGroup(id, startMediaGroup);
 
 		await repository.AddUser({ id, username, language_code });

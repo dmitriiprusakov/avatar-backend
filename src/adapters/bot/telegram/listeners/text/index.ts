@@ -24,7 +24,7 @@ const textListener = async ({ bot, message, cache, messagesCache, repository, lo
 	if (is_bot) return;
 
 	try {
-		if (text === "/start") return startHandler({ bot, repository, message, logger });
+		if (text.includes("/start")) return startHandler({ bot, repository, cache, message, logger });
 
 		if (text === "/help") return helpHandler({ bot, message, logger });
 
