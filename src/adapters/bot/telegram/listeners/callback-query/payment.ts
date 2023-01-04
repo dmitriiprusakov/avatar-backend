@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { ExternalServices } from "adapters/externals";
+import { FirestoreRepository } from "adapters/repository";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
 import { Cache, MessagesCache } from "types";
 import { v4 as uuidv4 } from "uuid";
@@ -39,16 +40,16 @@ export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, lo
 			await bot.answerCallbackQuery(queryId);
 		}
 
-		const isFree = cache[id]?.free;
-
-		if (isFree) {
+		if (cache[id]?.free) {
 			if (cache[id]?.links?.length && cache[id]?.sex) {
+				await bot.sendMessage(id, "🚀 Фото отправляются на обработку...");
+
 				await externals.astria.createTune({
 					chatId: id,
 					image_urls: cache[id].links,
 					name: cache[id].sex,
 					username,
-					promptsAmount: selectedPayment.payload,
+					promptsAmount: selectedPayment.payload.promptsAmount,
 					logger,
 				});
 
@@ -67,7 +68,7 @@ export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, lo
 				id,
 				selectedPayment.title,
 				selectedPayment.description,
-				selectedPayment.payload,
+				JSON.stringify(selectedPayment.payload),
 				YOOMONEY_TOKEN,
 				"RUB",
 				// @ts-ignore

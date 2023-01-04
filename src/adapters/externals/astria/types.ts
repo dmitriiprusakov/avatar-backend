@@ -10,7 +10,7 @@ export interface CreateTuneparams {
     username: string
     name: Sex,
     image_urls: string[],
-    promptsAmount: string,
+    promptsAmount: number,
     logger: Logger
 }
 

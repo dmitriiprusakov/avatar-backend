@@ -91,7 +91,7 @@ export const createTune = async ({ logger, chatId, username = "anonymous", name,
 			callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
 		}));
 
-		const randomPrompts = getRandom(promptsForName, +promptsAmount)
+		const randomPrompts = getRandom(promptsForName, promptsAmount)
 			.concat(getAdditionalPromptsForName(name)).map(prompt => ({
 				text: prompt.text,
 				callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
