@@ -3,11 +3,13 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
 import { Logger } from "winston";
 
+import { Payload } from "../callback-query/payments-config";
+
 interface SuccessfulPaymentListener {
-	bot: TelegramBot,
-	message: Message,
-	cache: Cache,
-	externals: ExternalServices,
+	bot: TelegramBot;
+	message: Message;
+	cache: Cache;
+	externals: ExternalServices;
 	logger: Logger;
 }
 
@@ -20,22 +22,26 @@ const successfulPaymentListener = async ({ bot, message, cache, externals, logge
 
 		if (successful_payment) {
 			try {
-				logger.log({
-					level: "info",
-					message: `S_P from ${id} ${username}`,
-				});
+				const invoice_payload: Payload = JSON.parse(successful_payment.invoice_payload);
+
+				await bot.sendMessage(id, "Фото отправляются на обработку...");
 
 				await externals.astria.createTune({
 					chatId: id,
 					image_urls: cache[id].links,
 					name: cache[id].sex,
 					username,
-					promptsAmount: successful_payment.invoice_payload,
+					promptsAmount: invoice_payload.promptsAmount,
 					logger,
 				});
 
 				await bot.sendMessage(id, "✨ Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete cache[id];
+
+				logger.log({
+					level: "info",
+					message: `S_P from ${id} ${username}`,
+				});
 
 				return;
 			} catch (error) {
