@@ -7,7 +7,6 @@ export type UserData = {
 	payment?: number,
 	links?: string[],
 	free?: boolean,
-	from?: string,
 }
 
 export type Cache = Record<TelegramId, UserData>

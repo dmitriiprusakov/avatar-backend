@@ -19,9 +19,6 @@ const newYearManPrompts = [
 		"text": "sks man in santa hat and red sweater, close up, portrait",
 	},
 	{
-		"text": "sks man as russian president on new year greetings, Kremlin on backgroud",
-	},
-	{
 		"text": "sks man on main poster from film Home Alone, frame from film, film poster",
 	},
 	{
@@ -44,9 +41,6 @@ const newYearWomanPrompts = [
 	},
 	{
 		"text": "sks beautiful woman as Snow Maiden, close up, portrait",
-	},
-	{
-		"text": "sks beautiful woman as Anna of Arendelle, disney queen, expressive eyes, digital art, ultradetailed, close up, portrait, artstation",
 	},
 	{
 		"text": "sks beautiful woman in snowfall, expressive eyes, digital art, ultradetailed, close up, portrait, artstation",

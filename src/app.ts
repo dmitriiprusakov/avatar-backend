@@ -1,4 +1,4 @@
-import "./libs/i18next";
+import "./common/i18n";
 import "./libs/dotenv";
 
 import express from "express";
