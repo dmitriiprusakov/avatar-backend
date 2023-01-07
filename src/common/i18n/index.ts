@@ -15,7 +15,7 @@ i18next
 		preload: ["en", "ru"],
 
 		backend: {
-			loadPath: path.resolve(__dirname, "../../resources/locales/{{lng}}/{{ns}}.json"),
+			loadPath: path.resolve(__dirname, "../../../resources/locales/{{lng}}/{{ns}}.json"),
 		},
 	});
 

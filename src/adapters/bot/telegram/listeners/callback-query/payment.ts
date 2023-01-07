@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { ExternalServices } from "adapters/externals";
-import { FirestoreRepository } from "adapters/repository";
 import TelegramBot, { CallbackQuery } from "node-telegram-bot-api";
 import { Cache, MessagesCache } from "types";
 import { v4 as uuidv4 } from "uuid";

@@ -1,4 +1,5 @@
 import { ExternalServices } from "adapters/externals";
+import { FirestoreRepository } from "adapters/repository";
 import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
 import { Logger } from "winston";
@@ -9,11 +10,12 @@ interface SuccessfulPaymentListener {
 	bot: TelegramBot;
 	message: Message;
 	cache: Cache;
+	repository: FirestoreRepository,
 	externals: ExternalServices;
 	logger: Logger;
 }
 
-const successfulPaymentListener = async ({ bot, message, cache, externals, logger }: SuccessfulPaymentListener) => {
+const successfulPaymentListener = async ({ bot, message, cache, repository, externals, logger }: SuccessfulPaymentListener) => {
 	try {
 		const { from, successful_payment } = message;
 		const { is_bot, id, username = "anonymous" } = from;
@@ -37,6 +39,8 @@ const successfulPaymentListener = async ({ bot, message, cache, externals, logge
 
 				await bot.sendMessage(id, "✨ Фото отправлены на обработку, примерное время ожидания 1 час!");
 				delete cache[id];
+
+				repository.AddUserPayment({ id, payment: invoice_payload.payment });
 
 				logger.log({
 					level: "info",

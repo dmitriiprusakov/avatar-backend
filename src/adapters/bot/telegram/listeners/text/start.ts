@@ -33,10 +33,10 @@ export const startHandler = async ({ bot, repository, message, logger }: StartPa
 			const params = Object.fromEntries(new URLSearchParams(url).entries());
 
 			if (params?.f) {
-				repository.SetUser({ id, username, languageCode, from: params?.f });
+				repository.AddUser({ id, username, languageCode, from: params?.f });
 			}
 		} else {
-			repository.SetUser({ id, username, languageCode });
+			repository.AddUser({ id, username, languageCode });
 		}
 
 		await bot.sendMediaGroup(id, startMediaGroup);

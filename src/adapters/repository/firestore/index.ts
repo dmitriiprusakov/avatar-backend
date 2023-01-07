@@ -3,7 +3,7 @@ import { FieldValue, Firestore, getFirestore } from "firebase-admin/firestore";
 import { Logger } from "winston";
 
 import serviceAccount from "../../../../service-account.json";
-import { CheckSecretParams, SetUserParams, UpdateCampaignPaymentsAmountTotalParams, UpdateCampaignUsersAmountParams } from "./types";
+import { AddUserParams, AddUserPaymentParams, CheckSecretParams } from "./types";
 
 interface FirestoreRepositoryConstructor {
 	logger: Logger
@@ -29,22 +29,40 @@ class FirestoreRepository {
 		return this.firestore.collection("secrets");
 	}
 
-	SetUser({ id, username, languageCode, from }: SetUserParams) {
+	AddUser({ id, username, languageCode, from }: AddUserParams) {
 		try {
+			const payload: any = {};
+
+			if (username) payload.alias = username;
+			if (languageCode) payload.lng = languageCode;
+			if (from) payload.from = FieldValue.arrayUnion(from);
+
 			const docRef = this.users().doc(`${id}`);
 
-			docRef.set({
-				alias: username,
-				lng: languageCode,
-				lastMsgTs: FieldValue.serverTimestamp(),
-				from: FieldValue.arrayUnion(from),
-			}, { merge: true });
+			docRef.set(payload, { merge: true });
 
 			return;
 		} catch (error) {
 			this.logger.log({
 				level: "info",
 				message: `Repo AddUser command failed, ${error}`,
+			});
+		}
+	}
+
+	AddUserPayment({ id, payment }: AddUserPaymentParams) {
+		try {
+			const docRef = this.users().doc(`${id}`);
+
+			docRef.set({
+				payments: FieldValue.arrayUnion(payment),
+			}, { merge: true });
+
+			return;
+		} catch (error) {
+			this.logger.log({
+				level: "info",
+				message: `Repo AddUserPayment command failed, ${error}`,
 			});
 		}
 	}

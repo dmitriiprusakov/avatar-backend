@@ -34,7 +34,7 @@ const initListeners = ({ bot, cache, messagesCache, repository, externals, logge
 	);
 	bot.on(
 		"successful_payment",
-		(message) => successfulPaymentListener({ bot, message, cache, externals, logger })
+		(message) => successfulPaymentListener({ bot, message, cache, repository, externals, logger })
 	);
 	bot.on(
 		"photo",

@@ -1,19 +1,15 @@
-export interface SetUserParams {
+export interface AddUserParams {
 	id: number;
 	username?: string;
 	languageCode?: string;
 	from?: string;
 }
 
+export interface AddUserPaymentParams {
+	id: number;
+	payment: number;
+}
+
 export interface CheckSecretParams {
 	code: string;
-}
-
-export interface UpdateCampaignUsersAmountParams {
-	campaignId: string;
-}
-
-export interface UpdateCampaignPaymentsAmountTotalParams {
-	campaignId: string;
-	payment: number;
 }
