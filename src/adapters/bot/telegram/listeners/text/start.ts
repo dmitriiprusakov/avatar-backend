@@ -11,7 +11,9 @@ const startMediaGroup = [
 ].map<InputMedia>((imageUrl, index) => ({
 	type: "photo",
 	media: imageUrl,
-	caption: index === 0 ? t("welcome", { lng: "ru" }) : undefined,
+	caption: index === 0 ? "Бот на техническом обслуживании, ждем вас немного позже!" : undefined,
+
+	// caption: index === 0 ? t("welcome", { lng: "ru" }) : undefined,
 }));
 
 interface StartParams {

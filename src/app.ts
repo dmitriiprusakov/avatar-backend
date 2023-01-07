@@ -12,7 +12,7 @@ import initRoutes from "./ports/http";
 import { Cache, MessagesCache } from "./types";
 
 const PORT = process.env.PORT || 8080;
-const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
+const ASTRIA_IS_FAST_BRANCH = process.env.ASTRIA_IS_FAST_BRANCH;
 
 const app = express();
 app.use(express.json());
@@ -30,7 +30,7 @@ async function main() {
 	server.listen(PORT, () => {
 		logger.log({
 			level: "info",
-			message: `We are live on ${PORT}, IS_TESTING_BRANCH = ${!!IS_TESTING_BRANCH}`,
+			message: `We are live on ${PORT}, ASTRIA_IS_FAST_BRANCH = ${!!ASTRIA_IS_FAST_BRANCH}`,
 		});
 
 		const repository = new FirestoreRepository({ logger });

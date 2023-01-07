@@ -77,7 +77,7 @@ const getRandom = (arr: unknown[], n: number) => {
 
 export const createTune = async ({ logger, chatId, username = "anonymous", name, image_urls, promptsAmount }: CreateTuneparams) => {
 	try {
-		const IS_TESTING_BRANCH = process.env.IS_TESTING_BRANCH;
+		const ASTRIA_IS_FAST_BRANCH = process.env.ASTRIA_IS_FAST_BRANCH;
 		const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
 
 		const promptsForName = getPromptsForName(name).map(prompt => ({
@@ -99,7 +99,7 @@ export const createTune = async ({ logger, chatId, username = "anonymous", name,
 			prompts_attributes: randomPrompts,
 		};
 
-		if (IS_TESTING_BRANCH) {
+		if (ASTRIA_IS_FAST_BRANCH) {
 			tune.branch = "fast";
 		}
 
