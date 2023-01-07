@@ -17,6 +17,7 @@
         "i18next-fs-backend": "^2.1.0",
         "i18next-http-middleware": "^3.2.1",
         "node-telegram-bot-api": "^0.60.0",
+        "node-vk-bot-api": "^3.5.0",
         "uuid": "^9.0.0",
         "winston": "^3.8.2"
     },
