@@ -21,9 +21,9 @@ interface StartParams {
 	repository: FirestoreRepository;
 	logger: Logger;
 }
-export const startHandler = async ({ bot, cache, repository, message, logger }: StartParams) => {
+export const startHandler = async ({ bot, repository, message, logger }: StartParams) => {
 	const { from, text } = message;
-	const { id, username = "anonymous", language_code } = from;
+	const { id, username = "anonymous", language_code: languageCode } = from;
 
 	try {
 		const commandPayload = text?.replace("/start ", "");
@@ -33,16 +33,13 @@ export const startHandler = async ({ bot, cache, repository, message, logger }: 
 			const params = Object.fromEntries(new URLSearchParams(url).entries());
 
 			if (params?.f) {
-				cache[id] = Object.assign(cache[id] || {}, {
-					from: params?.f,
-				});
-				repository.UpdateCampaignUsersAmount({ campaignId: params?.f });
+				repository.SetUser({ id, username, languageCode, from: params?.f });
 			}
+		} else {
+			repository.SetUser({ id, username, languageCode });
 		}
 
 		await bot.sendMediaGroup(id, startMediaGroup);
-
-		await repository.AddUser({ id, username, language_code });
 
 		logger.log({
 			level: "info",

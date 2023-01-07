@@ -1,7 +1,8 @@
-export interface AddUserParams {
-	id: number | string;
+export interface SetUserParams {
+	id: number;
 	username?: string;
-	language_code?: string;
+	languageCode?: string;
+	from?: string;
 }
 
 export interface CheckSecretParams {

@@ -3,7 +3,7 @@ import { FieldValue, Firestore, getFirestore } from "firebase-admin/firestore";
 import { Logger } from "winston";
 
 import serviceAccount from "../../../../service-account.json";
-import { AddUserParams, CheckSecretParams, UpdateCampaignPaymentsAmountTotalParams, UpdateCampaignUsersAmountParams } from "./types";
+import { CheckSecretParams, SetUserParams, UpdateCampaignPaymentsAmountTotalParams, UpdateCampaignUsersAmountParams } from "./types";
 
 interface FirestoreRepositoryConstructor {
 	logger: Logger
@@ -25,23 +25,22 @@ class FirestoreRepository {
 		return this.firestore.collection("users");
 	}
 
-	private campaigns() {
-		return this.firestore.collection("campaigns");
-	}
-
 	private secrets() {
 		return this.firestore.collection("secrets");
 	}
 
-	async AddUser({ id, username, language_code }: AddUserParams) {
+	SetUser({ id, username, languageCode, from }: SetUserParams) {
 		try {
 			const docRef = this.users().doc(`${id}`);
 
-			return await docRef.set({
+			docRef.set({
 				alias: username,
-				lng: language_code,
+				lng: languageCode,
 				lastMsgTs: FieldValue.serverTimestamp(),
+				from: FieldValue.arrayUnion(from),
 			}, { merge: true });
+
+			return;
 		} catch (error) {
 			this.logger.log({
 				level: "info",
@@ -65,40 +64,6 @@ class FirestoreRepository {
 			this.logger.log({
 				level: "info",
 				message: `Repo CheckSecret command failed, ${error}`,
-			});
-		}
-	}
-
-	UpdateCampaignUsersAmount({ campaignId }: UpdateCampaignUsersAmountParams) {
-		try {
-			console.log({ campaignId });
-
-			const docRef = this.campaigns().doc(campaignId);
-
-			docRef.set({
-				usersAmount: FieldValue.increment(1),
-			}, { merge: true });
-			return;
-		} catch (error) {
-			this.logger.log({
-				level: "info",
-				message: `Repo UpdateCampaignUsersAmount command failed, ${error}`,
-			});
-		}
-	}
-
-	UpdateCampaignPaymentsAmountTotal({ campaignId, payment }: UpdateCampaignPaymentsAmountTotalParams) {
-		try {
-			console.log({ campaignId, payment });
-			const docRef = this.campaigns().doc(`${campaignId}`);
-
-			docRef.set({
-				paymentsAmountTotal: FieldValue.increment(payment),
-			}, { merge: true });
-		} catch (error) {
-			this.logger.log({
-				level: "info",
-				message: `Repo UpdateCampaignPaymentsAmountTotal command failed, ${error}`,
 			});
 		}
 	}
