@@ -27,15 +27,13 @@ export const startHandler = async ({ bot, repository, message, logger }: StartPa
 	const { id, username = "anonymous", language_code: languageCode } = from;
 
 	try {
-		const commandPayload = text?.replace("/start ", "");
+		const [, commandPayload] = text?.split(" ");
 
-		if (commandPayload.length) {
+		if (commandPayload?.length) {
 			const url = Buffer.from(commandPayload, "base64").toString();
 			const params = Object.fromEntries(new URLSearchParams(url).entries());
 
-			if (params?.f) {
-				repository.AddUser({ id, username, languageCode, from: params?.f });
-			}
+			repository.AddUser({ id, username, languageCode, from: params?.f });
 		} else {
 			repository.AddUser({ id, username, languageCode });
 		}

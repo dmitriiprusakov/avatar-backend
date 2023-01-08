@@ -36,6 +36,7 @@ class FirestoreRepository {
 			if (username) payload.alias = username;
 			if (languageCode) payload.lng = languageCode;
 			if (from) payload.from = FieldValue.arrayUnion(from);
+			payload.lastMsgTs = FieldValue.serverTimestamp();
 
 			const docRef = this.users().doc(`${id}`);
 
@@ -56,6 +57,7 @@ class FirestoreRepository {
 
 			docRef.set({
 				payments: FieldValue.arrayUnion(payment),
+				lastMsgTs: FieldValue.serverTimestamp(),
 			}, { merge: true });
 
 			return;
