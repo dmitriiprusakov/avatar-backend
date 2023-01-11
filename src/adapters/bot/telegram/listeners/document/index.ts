@@ -2,8 +2,8 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import { Cache } from "types";
 import { Logger } from "winston";
 
-const MIN_IMAGES_COUNT = 5;
-const MAX_IMAGES_COUNT = 15;
+const MIN_IMAGES_COUNT = 10;
+const MAX_IMAGES_COUNT = 25;
 
 interface DocumentListener {
 	bot: TelegramBot,
