@@ -58,7 +58,7 @@ const documentListener = async ({ bot, cache, message, logger }: DocumentListene
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, D from ${id} ${username}, ${error} ${cache[id]?.links.join(",")}`,
+			message: `Error, D from ${id} ${username}, ${error} ${cache[id]?.links?.join(",")}`,
 		});
 	}
 };
