@@ -1,92 +1,123 @@
 [
     {
-        "text": "sks man as a japanese samurai by luis royo, artstation, beautiful, cinematic lighting, highly detailed, concept art - n 4, by frank frazetta and zdzisław be"
+        "styleName": "🦄 Во сне",
+        "text": "A psychedelic portrait of sks man, vibrant color scheme, highly detailed, in the style of romanticism, cinematic, artstation"
     },
     {
-        "text": "sks man as a red devil with horns by cheol seung"
+        "styleName": "👨‍🎨 JMB",
+        "text": "beautiful sks man in a business suit, anthropomorphic cyberpunk portrait painted by jean michel basquiat, by artgerm, highly detailed, sacred geometry, mathematics, snake, geometry, cyberpunk, vibrant, water"
     },
     {
-        "text": "illustration of a sks man in gta 5 cover art style, cinematic 4 k wallpaper, 8 k, ultra detailed, gta 5 cover art, high resolution, artstation, award winning"
+        "styleName": "🦾 Из стали",
+        "text": "stunning gear-punk stylish sks man wearing an stainless steel outfit, maximalist. by james jean and and shusei nagaoka, oil on canvas, surrealism, neoclassicism, renaissance, hyper realistic, ultra detailed, cell shaded, 8k. minimalism"
     },
     {
-        "text" : "ultra detailed close up portrait of sks man as an angel holding a glowing red sword while laying on a ruined concrete bed, extremely detailed digital painting, in the style of fenghua zhong and ruan jia and jeremy lipking and peter mohrbacher, mystical colors, rim light, beautiful lighting, 8 k, stunning scene, raytracing, octane, trending on artstation"
+        "styleName": "🍄 Magic",
+        "text": "handsome sks man with a magic mushroom by martine johanna and simon stalenhag and chie yoshii and casey weldon and wlop, ornate, dynamic, particulate, rich colors, intricate, elegant, highly detailed, centered, artstation, smooth, sharp focus, octane render, 8 k"
     },
     {
-        "text" : "concept art of sks man as 1900s gangster in the style of Ashley Wood , Keira Knightley in Pride and Prejudice, Sam Weber, Joao Ruas, Octavi Arrizabalaga portrait Peaky Blinders aesthetic canon of proportion grunge and vintage and sci fi aesthetic::1, epic lighting, hyperdetailed, artstation, 8k, high resolution, burnt edges, golden ratio, analogous colors, minimalist::1 --uplight --no long neck --no long anatomy --no extra anatomy --no second face —ar 9:16"
+        "styleName": "🧢 ⚾️ 🎴 ",
+        "text": "beautiful baseball card portrait of sks man. character design by disney, charlie bowater, ross tran, artgerm, and makoto shinkai, detailed, soft lighting, rendered in octane"
     },
     {
-        "text" : "closeup portrait shot of sks man as Aztek Warrior in an epic battle environment, intricate, elegant, highly detailed, centered, digital painting, artstation, concept art, smooth, sharp focus, illustration, artgerm, tomasz alen kopera, peter mohrbacher, donato giancola, joseph christian leyendecker, wlop, boris vallejo"
+        "styleName": "🎙 Пропаганда",
+        "text": "sks man poster in the style of neil krug, hand painted minimalistic brutalist propaganda style"
     },
     {
-        "text" : "full length portrait of sks man standing in field full of flowers, detailed gorgeous face, full body, confident pose, confident, male, model, god rays, intricate, elegant, seductive, realistic, hyperrealistic, character design, concept art, highly detailed, illustration, digital art, digital painting"
+        "styleName": "☮️ Хиппи",
+        "text": "sks man as a hippie from the 70s, colorful poster, highly detailed digital illustration"
     },
     {
-        "text" : "sks man in MATRIX wearing futuristic clothes, portait photo, profile picture, hyperrealistic, concept art, orange sunglasses, day time, octane render, unreal engine 5, digital art, high quality, highly detailed, 8K, cute, defined face, elegant clothes, trending on DeviantArt"
+        "styleName": "🍿 Постер фильма",
+        "text": "Movie poster depicting sks man, in a new live - action movie premiering on netflix",
+        "negative_prompt": "text, letters, written words"
     },
     {
-        "text" : "sks man as the joker picture by greg rutkowski, dynamic pose, matte painting, intricate, fantasy concept art, elegant, by stanley artgerm lau, wlop, golden ratio, thomas kindkade, alphonse mucha, loish, peter chung, norman rockwell"
+        "styleName": "🕯 Glow",
+        "text": "portrait of sks man, intricate, elegant, glowing lights, highly detailed, digital painting, artstation, glamor pose, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski, artey freytag"
     },
     {
-        "text" : "sks man as Santa Claus, new year's eve advert by coca cola"
+        "styleName": "🔴 Red",
+        "text": "ultra detailed close up portrait of sks man as an angel holding a glowing red sword while laying on a ruined concrete bed, extremely detailed digital painting, in the style of fenghua zhong and ruan jia and jeremy lipking and peter mohrbacher, mystical colors, rim light, beautiful lighting, 8 k, stunning scene, raytracing, octane, trending on artstation"
     },
     {
-        "text" : "sks man painted on the wall in London by Banksy, colourful, beautiful, epic"
+        "styleName": "🤵‍♂️ Викторианский политик",
+        "text": "sks man as a Portrait of a victorian politician, wearing a suit, detailed face, victorian, highly detailed, cinematic lighting"
     },
     {
-        "text" : "sks man as dj playing music on vinyl, DJ Magazine cover, painted by Van Gogh"
+        "styleName": "🌈 Фестиваль цвета",
+        "text": "colorful and festive portrait of sks man, rich vivid colors, ambient lighting, dynamic lighting, 4 k, atmospheric lighting, painted, intricate, highly detailed"
     },
     {
-        "text" : "sks man as American rock singer with a guitar, rolling stones magazine cover, painted by Van Gogh"
+        "styleName": "🏯 Самурай",
+        "text": "sks man as a japanese samurai by luis royo, artstation, beautiful, cinematic lighting, highly detailed, concept art by frank frazetta and zdzisław be"
     },
     {
-        "text" : "sks man as American rock singer with a guitar, the rolling stones magazine cover, high quality"
+        "styleName": "🌆 Гангстер",
+        "text": "concept art of sks man as 1900s gangster in the style of Ashley Wood, Keira Knightley in Pride and Prejudice, Sam Weber, Joao Ruas, Octavi Arrizabalaga portrait Peaky Blinders aesthetic canon of proportion grunge and vintage and sci fi aesthetic::1, epic lighting, hyperdetailed, artstation, 8k, high resolution, burnt edges, golden ratio, analogous colors, minimalist::1 --uplight --no long neck --no long anatomy --no extra anatomy --no second face —ar 9:16"
     },
     {
-        "text" : "sks man as American rock singer with a guitar, rolling stones magazine cover, painted by S.Dali"
+        "styleName": "🏞 Ацтек",
+        "text": "closeup portrait shot of sks man as Aztek Warrior in an epic battle environment, intricate, elegant, highly detailed, centered, digital painting, artstation, concept art, smooth, sharp focus, illustration, artgerm, tomasz alen kopera, peter mohrbacher, donato giancola, joseph christian leyendecker, wlop, boris vallejo"
     },
     {
-        "text" : "sks man as American rapper wearing chains and grills, XXL magazine cover, painted by Van Gogh"
+        "styleName": "👨‍🚀 Астронавт",
+        "text": "Symmetry!! portrait of a sks man astronaut, floral! horizon zero dawn machine, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha, 8 k"
     },
     {
-        "text" : "sks man as American rapper wearing chains and grills, XXL magazine cover, painted by S.Dali"
+        "styleName": "👦 Мультяшный стиль",
+        "text": "portrait of sks man, handsome, cartoonish, digital illustration"
     },
     {
-        "text" : "sks man as American rapper wearing chains and grills, XXL magazine cover, high quality"
+        "styleName": "🔦 Pixar",
+        "text": "portrait of sks man, matte painting concept blizzard pixar maya engine on stylized background splash comics global illumination lighting artstation"
     },
     {
-        "text" : "Symmetry!! portrait of a sks man astronaut, floral! horizon zero dawn machine, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha, 8 k"
+        "styleName": "🍭 Лоллипоп стикер арт",
+        "text": "sks man styled as candy floss lollipop rush art by butcher billy, sticker, colorful, illustration, highly detailed, simple, smooth and clean vector curves, no jagged lines, vector art, smooth andy warhol style"
     },
     {
-        "text" : "sks man as a hippie from 70s on a colorful poster, wearing hippie glasses, digital art"
+        "styleName": "🪐 ☄️ Гало планет",
+        "text": "pensive handsome sks man, pastel pink, halo of planets, chains, bright colors, highly detailed, concept art, matte, trending on artstation, strong strokes"
     },
     {
-        "text" : "sks man as a Portrait of a victorian politician, wearing a suit, detailed face, victorian, highly detailed, cinematic lighting"
+        "styleName": "🗡 Воин",
+        "text": "poster of sks man as awarrior god, standing alone on hill, centered, detailed gorgeous face, anime style, key visual, intricate detail, highly detailed, breathtaking, vibrant, panoramic, cinematic, Carne Griffiths, Conrad Roset, Makoto Shinkai"
     },
     {
-        "text" : "sks man as a digital illustration portrait, handsome, cartoonish"
+        "styleName": "〰 Линии",
+        "text": "portrait of a handsome sks man, an ultrafine detailed illustration by james jean, intricate linework, bright colors, final fantasy, behance contest winner, vanitas, angular, altermodern, unreal engine 5 highly rendered, global illumination, radiant light, detailed and intricate environment"
     },
     {
-        "text" : "portrait of a handsome sks man, an ultrafine detailed illustration by james jean, intricate linework, bright colors, final fantasy, behance contest winner, vanitas, angular, altermodern, unreal engine 5 highly rendered, global illumination, radiant light, detailed and intricate environment"
+        "styleName": "🤴 Принц",
+        "text": "sks man prince by Martine Johanna and Simon Stålenhag and Chie Yoshii and Casey Weldon and wlop, ornate, dynamic, particulate, rich colors, intricate, elegant, highly detailed, centered, artstation, smooth, sharp focus, octane render, 3d"
     },
     {
-        "text" : "portrait of sks man, mattepainting concept blizzard pixar maya engine on stylized background splash comics global illumination lighting artstation"
-    }, 
-    {
-        "text" : "award winning portrait of a handsome sks man with stunning eyes in a one off shoulder croptop and cargo pants with rainbow colored hair, outlined by whirling illuminated neon lines and fine lines swirling in circles by rhads, digital art, trending on artstation"
+        "styleName": "⚡️ Неоновые линии",
+        "text": "A award winning half body portrait of a beautiful sks man outlined by whirling illuminated neon lines, outrun, vaporware, shaded flat illustration, digital art, trending on artstation, highly detailed, fine detail, intricate"
     },
     {
-        "text" : "colorful and festive portrait of sks man, rich vivid colors, ambient lighting, dynamic lighting, 4 k, atmospheric lighting, painted, intricate, highly detailed"
+        "styleName": "🥃 Бар",
+        "text": "A young sophisticated beautiful sks man, dimly lit dive bar, hip modern vibe, relaxed pose, wild, highly detailed, digital painting, artstation, sharp focus, illustration, detailed painterly digital art style by tom whalen + perfect facial symmetry + dim volumetric lighting, vibrant deep colors, 8k octane beautifully detailed render, post-processing, extremely hyperdetailed, epic composition, grim yet sparkling atmosphere, cinematic lighting + masterpiece, art nouveau, unreal engine, hyperrealistic, old english, sepia"
     },
     {
-        "text" : "portrait of sks man wearing sunglasses, sexy, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration"
+        "styleName": "🛡 Викинг",
+        "text": "sks man as viking, portrait, skull on the chest, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, cinematic lighting, art by artgerm and greg rutkowski and alphonse mucha"
     },
     {
-        "text" : "stylish sks man cartoon portrait made out of rain, pinstripe suit, short sleek hair, galactic background, rendered in octane, unreal engine, highly detailed, trending on artstation, realistic, neon, beautiful"
+        "styleName": "⚓️ Моряк",
+        "text": "highly detailed portrait of sks man as old sailor, by Dustin Nguyen, Akihiko Yoshida, Greg Tocchini, Greg Rutkowski, Cliff Chiang, 4k resolution, Dishonored inspired, bravely default inspired, vibrant but dreary red, black and white color scheme! ! ! , epic extreme long shot, dark mood and strong backlighting, volumetric lights, smoke volutes, artstation HQ, unreal engine, octane renderer, HQ, 8K"
     },
     {
-        "text" : "sks man styled as candy floss lollipop rush art by butcher billy, sticker, colorful, illustration, highly detailed, simple, smooth and clean vector curves, no jagged lines, vector art, smooth andy warhol style"
+        "styleName": "🛰 Космос",
+        "text": "ultra realistic digital portrait of sks man, cosmic energy, colorful, painting burst, beautiful symmetrical face, nonchalant kind look, realistic eyes, tone mapped, intricate, elegant, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, dreamy magical atmosphere, 8k"
     },
     {
-        "text" : "pensive handsome sks man, pastel pink, halo of planets, chains, bright colors, highly detailed, concept art, matte, trending on artstation, strong strokes"
+        "styleName": "🫀 Вены",
+        "text": "sks man as strong warrior prince, centered, key visual, intricate, highly detailed, breathtaking beauty, precise lineart, vibrant, comprehensive cinematic, Carne Griffiths, Conrad Roset"
+    },
+    {
+        "styleName": "🌚 Луна",
+        "text": "closeup portrait of sks man, dramatic lighting, city background, night, moon, chiaroscuro, high detail, painted by igor kieryluk, painted by bobby chiu, trending on artstation"
     }
 ]
