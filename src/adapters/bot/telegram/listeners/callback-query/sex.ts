@@ -53,7 +53,7 @@ export const sexQueryHandler = async ({ bot, query, cache, messagesCache, logger
 
 		const { message_id } = await bot.sendMessage(
 			id,
-			"Сколько аватарок рисуем? Скидки от 20 до 30% 🎁",
+			"Сколько аватарок рисуем?",
 			{
 				reply_markup: {
 					inline_keyboard: paymentsConfig.inline_keyboard,
