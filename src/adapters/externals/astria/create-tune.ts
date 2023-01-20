@@ -28,25 +28,25 @@ const getRandom = (arr: unknown[], n: number) => {
 };
 
 export const createTune = async ({ logger, chatId, username = "anonymous", name, image_urls, promptsAmount }: CreateTuneparams) => {
+	const ASTRIA_IS_FAST_BRANCH = process.env.ASTRIA_IS_FAST_BRANCH;
+	const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
+
+	const promptsForName = getPromptsForName(name).map(prompt => ({
+		text: prompt.text,
+		callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
+	}));
+
+	const randomPrompts = getRandom(promptsForName, promptsAmount);
+
+	const tune: Tune = {
+		title: username,
+		name,
+		callback: `${ASTRIA_CALLBACK_DOMAIN}/finetune?i=${chatId}`,
+		image_urls,
+		prompts_attributes: randomPrompts,
+	};
+
 	try {
-		const ASTRIA_IS_FAST_BRANCH = process.env.ASTRIA_IS_FAST_BRANCH;
-		const ASTRIA_CALLBACK_DOMAIN = process.env.ASTRIA_CALLBACK_DOMAIN;
-
-		const promptsForName = getPromptsForName(name).map(prompt => ({
-			text: prompt.text,
-			callback: `${ASTRIA_CALLBACK_DOMAIN}/prompt?i=${chatId}`,
-		}));
-
-		const randomPrompts = getRandom(promptsForName, promptsAmount);
-
-		const tune: Tune = {
-			title: username,
-			name,
-			callback: `${ASTRIA_CALLBACK_DOMAIN}/finetune?i=${chatId}`,
-			image_urls,
-			prompts_attributes: randomPrompts,
-		};
-
 		if (ASTRIA_IS_FAST_BRANCH) {
 			tune.branch = "fast";
 		}
@@ -57,7 +57,7 @@ export const createTune = async ({ logger, chatId, username = "anonymous", name,
 	} catch (error) {
 		logger.log({
 			level: "error",
-			message: `Error, T for ${chatId} ${username}, ${error}`,
+			message: `Error, T for ${chatId} ${username} ${name} ${image_urls} ${randomPrompts.map(p => `<${p.text}>`)}, ${error}`,
 		});
 	}
 };

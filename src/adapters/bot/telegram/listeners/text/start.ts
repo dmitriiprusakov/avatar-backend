@@ -4,10 +4,14 @@ import TelegramBot, { InputMedia, Message } from "node-telegram-bot-api";
 import { Cache } from "types";
 import { Logger } from "winston";
 
+// const startMediaGroup = [
+// 	"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
+// 	"https://www.dropbox.com/s/dd4qgvvcz11y8m4/recommended.png?dl=0",
+// 	"https://www.dropbox.com/s/56zzg8b70yrx2ra/not_recommended.png?dl=0",
+// ]
+
 const startMediaGroup = [
-	"https://www.dropbox.com/s/docz6jphy7dki10/examples_gallery.png?dl=0",
-	"https://www.dropbox.com/s/dd4qgvvcz11y8m4/recommended.png?dl=0",
-	"https://www.dropbox.com/s/56zzg8b70yrx2ra/not_recommended.png?dl=0",
+	"https://www.dropbox.com/s/o0fr5234haf5hbw/instructionUpdated.png?dl=0",
 ].map<InputMedia>((imageUrl, index) => ({
 	type: "photo",
 	media: imageUrl,
@@ -37,6 +41,8 @@ export const startHandler = async ({ bot, repository, message, logger }: StartPa
 		} else {
 			repository.AddUser({ id, username, languageCode });
 		}
+
+		await bot.sendPhoto(id, "https://www.dropbox.com/s/eotkxcuviqkc4dr/examples_grid.png?dl=0");
 
 		await bot.sendMediaGroup(id, startMediaGroup);
 
