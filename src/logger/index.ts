@@ -17,7 +17,7 @@ const initLogger = () => {
 		],
 	});
 
-	if (process.env.LOGGER_MODE === "test") {
+	if (!!process.env.LOGGER_TO_CONSOLE) {
 		logger.add(new transports.Console({
 			format: format.simple(),
 		}));

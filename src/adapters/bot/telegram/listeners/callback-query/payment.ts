@@ -7,7 +7,7 @@ import { Logger } from "winston";
 
 import { payments } from "./payments-config";
 
-const YOOMONEY_TOKEN = process.env.YOOMONEY_TOKEN;
+const YOOMONEY_TELEGRAM_BOT_TOKEN = process.env.YOOMONEY_TELEGRAM_BOT_TOKEN;
 
 interface PaymentQueryParams {
 	bot: TelegramBot,
@@ -68,7 +68,7 @@ export const paymentQueryHandler = async ({ bot, query, cache, messagesCache, lo
 				selectedPayment.title,
 				selectedPayment.description,
 				JSON.stringify(selectedPayment.payload),
-				YOOMONEY_TOKEN,
+				YOOMONEY_TELEGRAM_BOT_TOKEN,
 				"RUB",
 				// @ts-ignore
 				selectedPayment.prices,

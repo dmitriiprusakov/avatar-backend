@@ -6,7 +6,7 @@ import path from "path";
 i18next
 	.use(FsBackend)
 	.init({
-		debug: process.env.DEBUG_I18NEXT === "true",
+		debug: !!process.env.DEBUG_I18NEXT,
 
 		initImmediate: false,
 

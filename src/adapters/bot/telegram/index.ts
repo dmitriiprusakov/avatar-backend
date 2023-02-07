@@ -6,7 +6,7 @@ import { Logger } from "winston";
 
 import initListeners from "./listeners";
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 interface InitTelegramBot {
 	logger?: Logger,
@@ -17,7 +17,7 @@ interface InitTelegramBot {
 }
 
 const initTelegramBot = ({ logger, cache, messagesCache, repository = null, externals }: InitTelegramBot) => {
-	const bot = new TelegramBotApi(BOT_TOKEN, { polling: true });
+	const bot = new TelegramBotApi(TELEGRAM_BOT_TOKEN, { polling: true });
 
 	bot.setMyCommands([
 		{ command: "/start", description: "Начать" },
